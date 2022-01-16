@@ -1,0 +1,3 @@
+/home/flqn/git/MyoroPlayer/build/CMakeFiles/MyoroPlayer.dir
+/home/flqn/git/MyoroPlayer/build/CMakeFiles/edit_cache.dir
+/home/flqn/git/MyoroPlayer/build/CMakeFiles/rebuild_cache.dir
