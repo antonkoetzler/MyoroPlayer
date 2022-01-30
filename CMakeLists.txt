@@ -1,5 +1,7 @@
 PROJECT(MyoroPlayer)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+SET(wxWidgets_ROOT_DIR "C:/wxWidgets-3.1.5")
+SET(wxWidgets_CONFIGURATION mswu)
 FIND_PACKAGE(wxWidgets REQUIRED core base)
 INCLUDE("${wxWidgets_USE_FILE}")
 AUX_SOURCE_DIRECTORY(./src/ SRC)
