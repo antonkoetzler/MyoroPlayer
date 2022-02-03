@@ -2,6 +2,7 @@
 
 #include <wx/wx.h>
 #include "SongList.h"
+#include "MenuBar.h"
 
 class Frame : public wxFrame
 {
@@ -12,7 +13,7 @@ class Frame : public wxFrame
  private:
   // Sizer for dividing song list, music controls, etc
   wxBoxSizer* ui;
-  SongList* sl; // sl = song list
-                // On Windows, you cannot set the var name to songlist
+  SongList* songlist;
+  MenuBar* menubar;
 };
 

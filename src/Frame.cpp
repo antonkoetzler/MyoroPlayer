@@ -6,14 +6,17 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wx
 
   ui = new wxBoxSizer(wxVERTICAL);
 
-  sl = new SongList(this);
+  songlist = new SongList(this);
   ui->Add(
-    sl,
+    songlist,
     1,
     wxEXPAND
   );
 
+  menubar = new MenuBar();
+
   SetSizer(ui);
+  SetMenuBar(menubar);
 }
 
 Frame::~Frame() { this->Destroy(); }
