@@ -1,6 +1,6 @@
 #include "SongList.h"
 
-SongList::SongList(wxWindow* parent) : wxListBox(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxLB_MULTIPLE | wxLB_EXTENDED | wxLB_SORT)
+SongList::SongList(wxWindow* parent) : wxListBox(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxLB_EXTENDED | wxLB_SORT)
 {
-  Append("Hello World");
+  for (int i = 0; i < 10; i++) Append("Hello");
 }
