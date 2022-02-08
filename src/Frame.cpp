@@ -13,6 +13,13 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wx
     wxEXPAND
   );
 
+  controls = new Controls(this);
+  ui->Add(
+    controls,
+    0,
+    wxEXPAND
+  );
+
   menubar = new MenuBar();
 
   SetSizer(ui);

@@ -3,6 +3,7 @@
 #include <wx/wx.h>
 #include "SongList.h"
 #include "MenuBar.h"
+#include "Controls.h"
 
 class Frame : public wxFrame
 {
@@ -11,9 +12,9 @@ class Frame : public wxFrame
   ~Frame();
 
  private:
-  // Sizer for dividing song list, music controls, etc
-  wxBoxSizer* ui;
+  wxBoxSizer* ui; // Sizer for dividing song list, music controls, etc
   SongList* songlist;
   MenuBar* menubar;
+  Controls* controls;
 };
 
