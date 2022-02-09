@@ -10,6 +10,11 @@ class Controls : public wxPanel
 
  private:
   wxBoxSizer* divider; // Divides play/pause, album cover, etc
-  wxBoxSizer* playControls; // play/pause, next song, song slider
+  wxBoxSizer* playControls; // Sizer for play/pause, next song, song slider
+    wxBoxSizer* playControlsButtons; // Sizer for actual play/pause buttons
+      wxButton* shuffle;
+      wxButton* playPrevious;
+      wxButton* playButton;
+      wxButton* playNext;
     wxSlider* songSlider;
 };
