@@ -1,6 +1,6 @@
 #include "Controls.h"
 
-Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1400, 75))
+Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1400, 85))
 {
   // Allocating playControls
   playControls = new wxBoxSizer(wxVERTICAL);
@@ -24,12 +24,25 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
   // Allocating playControlsButtons
   playControlsButtons = new wxBoxSizer(wxHORIZONTAL);
 
-  shuffle = new wxButton(
+  // Loading images onto the bitmap buttons
+  wxImage::AddHandler(new wxPNGHandler); // Initialize wxWidgets PNG handler
+  wxBitmap imgBitmap;
+  wxLogNull errorWorkaround; // Supressing a warning coming from the PNG handler
+                             // Just initializing this variable prevents errors, nothing else needs to be done
+
+  imgBitmap.LoadFile("../img/shuffle.png", wxBITMAP_TYPE_PNG);
+  if (!imgBitmap.IsOk())
+  {
+    std::cout << "Error loading shuffle.png" << std::endl;
+    Close(true);
+  }
+
+  shuffle = new wxBitmapButton(
     this,
     wxID_ANY,
-    wxEmptyString,
+    imgBitmap,
     wxDefaultPosition,
-    wxSize(30, 30)
+    wxSize(40, 40)
   );
   playControlsButtons->Add(
     shuffle,
@@ -38,12 +51,19 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
     5
   );
 
-  playPrevious = new wxButton(
+  imgBitmap.LoadFile("../img/playPrevious.png", wxBITMAP_TYPE_PNG);
+  if (!imgBitmap.IsOk())
+  {
+    std::cout << "Error loading playPrevious.png" << std::endl;
+    Close(true);
+  }
+
+  playPrevious = new wxBitmapButton(
     this,
     wxID_ANY,
-    wxEmptyString,
+    imgBitmap,
     wxDefaultPosition,
-    wxSize(30, 30)
+    wxSize(40, 40)
   );
   playControlsButtons->Add(
     playPrevious,
@@ -52,12 +72,19 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
     5
   );
 
-  playButton = new wxButton(
+  imgBitmap.LoadFile("../img/play.png", wxBITMAP_TYPE_PNG);
+  if (!imgBitmap.IsOk())
+  {
+    std::cout << "Error loading play.png" << std::endl;
+    Close(true);
+  }
+
+  playButton = new wxBitmapButton(
     this,
     wxID_ANY,
-    wxEmptyString,
+    imgBitmap,
     wxDefaultPosition,
-    wxSize(30, 30)
+    wxSize(40, 40)
   );
   playControlsButtons->Add(
     playButton,
@@ -66,12 +93,19 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
     5
   );
 
-  playNext = new wxButton(
+  imgBitmap.LoadFile("../img/playNext.png", wxBITMAP_TYPE_PNG);
+  if (!imgBitmap.IsOk())
+  {
+    std::cout << "Error loading playNext.png" << std::endl;
+    Close(true);
+  }
+
+  playNext = new wxBitmapButton(
     this,
     wxID_ANY,
-    wxEmptyString,
+    imgBitmap,
     wxDefaultPosition,
-    wxSize(30, 30)
+    wxSize(40, 40)
   );
   playControlsButtons->Add(
     playNext,
