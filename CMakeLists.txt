@@ -29,5 +29,4 @@ TARGET_LINK_LIBRARIES(
 	shlwapi
 	version
 	wsock32
-	${wxWidgets_LIBRARIES}
 )

@@ -1,5 +1,9 @@
 #include "Controls.h"
 
+BEGIN_EVENT_TABLE(Controls, wxPanel)
+  EVT_MEDIA_LOADED(MEDIA, Controls::playSong)
+END_EVENT_TABLE()
+
 Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1400, 85))
 {
   // Allocating playControls
@@ -130,19 +134,23 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
   SetSizer(divider);
 }
 
-void Controls::playSong(wxString songDirectory, SongList* songlist)
+void Controls::loadSong(wxString songDirectory, SongList* songlist)
 {
   if (playlist != nullptr) { playlist = nullptr; playlist = songlist; }
   if (mediaPlayer != nullptr) { delete mediaPlayer; mediaPlayer = nullptr; }
 
   songCache.push_back(songDirectory);
 
-  mediaPlayer = new wxMediaCtrl();
-
-  std::cout << songDirectory << std::endl;
-
-  if (mediaPlayer->Create(this, wxID_ANY, songDirectory, wxDefaultPosition, wxDefaultSize))
-    if (mediaPlayer->Play())
-      if (mediaPlayer->GetState() == wxMEDIASTATE_PLAYING)
-        std::cout << "wxMEDIASTATE_PLAYING" << std::endl;
+  mediaPlayer = new wxMediaCtrl(
+    this,
+    MEDIA,
+    wxEmptyString,
+    wxDefaultPosition,
+    wxDefaultSize,
+    0,
+    wxMEDIABACKEND_WMP10
+  );
+  if (mediaPlayer->Load(songDirectory)) mediaPlayer->Play();
 }
+
+void Controls::playSong(wxMediaEvent& evt) { mediaPlayer->Play(); }

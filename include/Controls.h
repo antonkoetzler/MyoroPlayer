@@ -7,7 +7,6 @@
 #include "SongList.h"
 
 #include "wx/wxprec.h"
-
 #include "wx/link.h"
 wxFORCE_LINK_MODULE(wxmediabackend_am)
 wxFORCE_LINK_MODULE(wxmediabackend_qt)
@@ -21,9 +20,12 @@ class Controls : public wxPanel
  public:
   Controls(wxFrame*);
 
-  void playSong(wxString, SongList*);
+  void loadSong(wxString, SongList*);
+  void playSong(wxMediaEvent&);
 
  private:
+  DECLARE_EVENT_TABLE();
+
   wxBoxSizer* divider; // Divides play/pause, album cover, etc
   wxBoxSizer* playControls; // Sizer for play/pause, next song, song slider
     wxBoxSizer* playControlsButtons; // Sizer for actual play/pause buttons
