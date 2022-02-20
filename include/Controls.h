@@ -6,6 +6,13 @@
 #include <vector>
 #include "SongList.h"
 
+#include "wx/wxprec.h"
+
+#include "wx/link.h"
+wxFORCE_LINK_MODULE(wxmediabackend_am)
+wxFORCE_LINK_MODULE(wxmediabackend_qt)
+wxFORCE_LINK_MODULE(wxmediabackend_wmp10)
+
 
 enum { MEDIA };
 

@@ -35,7 +35,7 @@ Frame::~Frame() { this->Destroy(); }
 void Frame::getSongAndPlaylist(wxCommandEvent& evt)
 {
   // Gotta change this to use other directories
-  wxString songDirectory = "../songs/" + evt.GetString();
+  wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + evt.GetString();
   
   controls->playSong(songDirectory, songlist);
 }

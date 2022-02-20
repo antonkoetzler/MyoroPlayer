@@ -138,6 +138,11 @@ void Controls::playSong(wxString songDirectory, SongList* songlist)
   songCache.push_back(songDirectory);
 
   mediaPlayer = new wxMediaCtrl();
-  //mediaPlayer->Load(songDirectory);
-  //mediaPlayer->Play();
+
+  std::cout << songDirectory << std::endl;
+
+  if (mediaPlayer->Create(this, wxID_ANY, songDirectory, wxDefaultPosition, wxDefaultSize))
+    if (mediaPlayer->Play())
+      if (mediaPlayer->GetState() == wxMEDIASTATE_PLAYING)
+        std::cout << "wxMEDIASTATE_PLAYING" << std::endl;
 }
