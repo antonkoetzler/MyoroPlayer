@@ -129,3 +129,15 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
 
   SetSizer(divider);
 }
+
+void Controls::playSong(wxString songDirectory, SongList* songlist)
+{
+  if (playlist != nullptr) { playlist = nullptr; playlist = songlist; }
+  if (mediaPlayer != nullptr) { delete mediaPlayer; mediaPlayer = nullptr; }
+
+  songCache.push_back(songDirectory);
+
+  mediaPlayer = new wxMediaCtrl();
+  //mediaPlayer->Load(songDirectory);
+  //mediaPlayer->Play();
+}

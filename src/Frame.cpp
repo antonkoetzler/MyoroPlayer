@@ -1,5 +1,9 @@
 #include "Frame.h"
 
+BEGIN_EVENT_TABLE(Frame, wxFrame)
+  EVT_LISTBOX_DCLICK(SONGLIST, Frame::getSongAndPlaylist)
+END_EVENT_TABLE()
+
 Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wxSize(1400, 800))
 {
   Center();
@@ -28,3 +32,10 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wx
 
 Frame::~Frame() { this->Destroy(); }
 
+void Frame::getSongAndPlaylist(wxCommandEvent& evt)
+{
+  // Gotta change this to use other directories
+  wxString songDirectory = "../songs/" + evt.GetString();
+  
+  controls->playSong(songDirectory, songlist);
+}

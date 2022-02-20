@@ -1,6 +1,6 @@
 #include "SongList.h"
 
-SongList::SongList(wxWindow* parent) : wxListBox(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxLB_EXTENDED | wxLB_SORT)
+SongList::SongList(wxWindow* parent) : wxListBox(parent, SONGLIST, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxLB_EXTENDED | wxLB_SORT)
 {
   dirReader = new wxDir("../songs/");
 
@@ -40,7 +40,6 @@ bool SongList::checkExtension(wxString& fileName)
     if (fileName[i] == '.')
     {
       wxString fileExtension = fileName.substr(i + 1);
-      fileName = fileName.substr(0, i);
 
       // Making fileExtension lowercase
       for (int i = 0; i < fileExtension.length(); i++)
