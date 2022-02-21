@@ -141,16 +141,27 @@ void Controls::loadSong(wxString songDirectory, SongList* songlist)
 
   songCache.push_back(songDirectory);
 
-  mediaPlayer = new wxMediaCtrl(
-    this,
-    MEDIA,
-    wxEmptyString,
-    wxDefaultPosition,
-    wxDefaultSize,
-    0,
-    wxMEDIABACKEND_WMP10
-  );
-  if (mediaPlayer->Load(songDirectory)) mediaPlayer->Play();
+  #ifdef _WIN32
+    mediaPlayer = new wxMediaCtrl(
+      this,
+      MEDIA,
+      wxEmptyString,
+      wxDefaultPosition,
+      wxDefaultSize,
+      0,
+      wxMEDIABACKEND_WMP10
+    );
+  #endif
+
+  #ifdef linux
+    mediaPlayer = new wxMediaCtrl(this, MEDIA);
+  #endif
+
+  if (!mediaPlayer->Load(songDirectory))
+  {
+    std::cout << "Couldn't load song (Controls::loadSong)" << std::endl;
+    Close();
+  }
 }
 
 void Controls::playSong(wxMediaEvent& evt) { mediaPlayer->Play(); }

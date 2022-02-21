@@ -35,7 +35,13 @@ Frame::~Frame() { this->Destroy(); }
 void Frame::getSongAndPlaylist(wxCommandEvent& evt)
 {
   // Gotta change this to use other directories
-  wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + evt.GetString();
+  #ifdef _WIN32
+    wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + evt.GetString();
+  #endif
+  
+  #ifdef linux
+    wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/" + evt.GetString();
+  #endif
   
   controls->loadSong(songDirectory, songlist);
 }
