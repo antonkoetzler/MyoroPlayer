@@ -196,6 +196,15 @@ void Controls::togglePlay(wxCommandEvent& evt)
 
 void Controls::toggleShuffle(wxCommandEvent& evt)
 {
-  if (shuffleToggle == 0) shuffleToggle = 1;
-  else shuffleToggle = 0;
+  switch (shuffleToggle)
+  {
+    case 0:
+      shuffleToggle = 1;
+      std::cout << shuffleToggle << std::endl;
+      break;
+    case 1:
+      shuffleToggle = 0;
+      std::cout << shuffleToggle << std::endl;
+      break;
+  }
 }
