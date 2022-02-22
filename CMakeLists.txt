@@ -17,8 +17,6 @@ ADD_EXECUTABLE(${PROJECT_NAME} ${SRC})
 # Linux library configuration
 if (UNIX)
   TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
-
-  MESSAGE("---LINUX CONFIGURED---")
 endif (UNIX)
 
 # Windows library configuration
@@ -45,6 +43,4 @@ if (WIN32)
 	  version
 	  wsock32
   )
-
-  MESSAGE("---WINDOWS CONFIGURED---")
 endif (WIN32)

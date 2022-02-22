@@ -2,6 +2,8 @@
 
 BEGIN_EVENT_TABLE(Controls, wxPanel)
   EVT_MEDIA_LOADED(MEDIA, Controls::playSong)
+  EVT_BUTTON(SHUFFLE, Controls::toggleShuffle)
+  EVT_BUTTON(PLAY, Controls::togglePlay)
 END_EVENT_TABLE()
 
 Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1400, 85))
@@ -43,7 +45,7 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
 
   shuffle = new wxBitmapButton(
     this,
-    wxID_ANY,
+    SHUFFLE,
     imgBitmap,
     wxDefaultPosition,
     wxSize(40, 40)
@@ -64,7 +66,7 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
 
   playPrevious = new wxBitmapButton(
     this,
-    wxID_ANY,
+    PLAYPREVIOUS,
     imgBitmap,
     wxDefaultPosition,
     wxSize(40, 40)
@@ -85,7 +87,7 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
 
   playButton = new wxBitmapButton(
     this,
-    wxID_ANY,
+    PLAY,
     imgBitmap,
     wxDefaultPosition,
     wxSize(40, 40)
@@ -106,7 +108,7 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
 
   playNext = new wxBitmapButton(
     this,
-    wxID_ANY,
+    PLAYNEXT,
     imgBitmap,
     wxDefaultPosition,
     wxSize(40, 40)
@@ -138,6 +140,7 @@ void Controls::loadSong(wxString songDirectory, SongList* songlist)
 {
   if (playlist != nullptr) { playlist = nullptr; playlist = songlist; }
   if (mediaPlayer != nullptr) { delete mediaPlayer; mediaPlayer = nullptr; }
+  if (updateslider != nullptr) { delete updateslider; updateslider = nullptr; }
 
   songCache.push_back(songDirectory);
 
@@ -162,6 +165,37 @@ void Controls::loadSong(wxString songDirectory, SongList* songlist)
     std::cout << "Couldn't load song (Controls::loadSong)" << std::endl;
     Close();
   }
+
+  updateslider = new UpdateSlider(songSlider, mediaPlayer, playlist);
 }
 
-void Controls::playSong(wxMediaEvent& evt) { mediaPlayer->Play(); }
+void Controls::playSong(wxMediaEvent& evt)
+{
+  // Setting the duration of the music slider/gauge
+  wxLongLong songLength = mediaPlayer->Length();
+  int songLengthSeconds = (int)(songLength / 1000).GetValue();
+  songSlider->SetRange(0, songLengthSeconds);
+
+  mediaPlayer->Play();
+}
+
+void Controls::togglePlay(wxCommandEvent& evt)
+{
+  wxMediaState mediaPlayerState = mediaPlayer->GetState();
+
+  switch (mediaPlayerState)
+  {
+    case wxMEDIASTATE_PLAYING:
+      mediaPlayer->Pause();
+      break;
+    case wxMEDIASTATE_PAUSED:
+      mediaPlayer->Play();
+      break;
+  }
+}
+
+void Controls::toggleShuffle(wxCommandEvent& evt)
+{
+  if (shuffleToggle == 0) shuffleToggle = 1;
+  else shuffleToggle = 0;
+}
