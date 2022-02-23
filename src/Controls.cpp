@@ -16,9 +16,9 @@ Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wx
     SLIDER,
     0,
     0,
-    0,
+    1,
     wxDefaultPosition,
-    wxSize(400, 50)
+    wxSize(400, 30)
   );
 
   shuffle = new wxButton(
@@ -79,7 +79,8 @@ Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wx
   mainControls->Add(
     slider,
     0,
-    wxALL | wxALIGN_CENTRE
+    wxALL | wxALIGN_CENTRE,
+    10
   );
   mainControls->Add(
     mainControlsButtons,
