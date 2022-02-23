@@ -11,15 +11,28 @@ END_EVENT_TABLE()
 
 Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wxDefaultPosition, size)
 {
-  slider = new wxSlider(
-    this,
-    SLIDER,
-    0,
-    0,
-    1,
-    wxDefaultPosition,
-    wxSize(400, 30)
-  );
+  #ifdef linux
+    slider = new wxSlider(
+      this,
+      SLIDER,
+      0,
+      0,
+      1,
+      wxDefaultPosition,
+      wxSize(400, 40)
+    );
+  #endif
+  #ifdef _WIN32
+    slider = new wxSlider(
+      this,
+      SLIDER,
+      0,
+      0,
+      1,
+      wxDefaultPosition,
+      wxSize(400, 30)
+    );
+  #endif
 
   shuffle = new wxButton(
     this,
