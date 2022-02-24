@@ -3,14 +3,57 @@
 BEGIN_EVENT_TABLE(Controls, wxPanel)
   EVT_MEDIA_LOADED(MEDIA, Controls::playSong)
   EVT_SCROLL_THUMBRELEASE(Controls::changeCurrentTimePlaying)
-//  EVT_BUTTON(PREVIOUS, Controls::previousSong)
+  EVT_BUTTON(PREVIOUS, Controls::previousSong)
   EVT_BUTTON(PLAY, Controls::togglePause)
-//  EVT_BUTTON(NEXT, Controls::nextSong)
+  EVT_BUTTON(NEXT, Controls::nextSong)
   EVT_BUTTON(SHUFFLE, Controls::toggleShuffle)
 END_EVENT_TABLE()
 
 Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wxDefaultPosition, size)
 {
+  songDetailsContainer = new wxPanel(
+    this,
+    wxID_ANY,
+    wxDefaultPosition,
+    wxSize(300, 115)
+  );
+
+  // Need to init PNG image handler
+  wxImage::AddHandler(new wxPNGHandler);
+  wxBitmap image;
+  #ifdef linux
+    image.LoadFile("../img/musicNote.png", wxBITMAP_TYPE_PNG);
+  #endif
+  #ifdef _WIN32
+    image.LoadFile("..\\img\\musicNote.png", wxBITMAP_TYPE_PNG);
+  #endif
+
+  if (image.IsOk())
+    musicNote = new wxStaticBitmap(songDetailsContainer, wxID_ANY, image);
+
+  details = new wxStaticText(
+    songDetailsContainer,
+    wxID_ANY,
+    "Song Name\nSong File Extension",
+    wxDefaultPosition,
+    wxSize(200, 50),
+    wxALIGN_LEFT
+  );
+  details->SetFont(
+    wxFont(
+      12,
+      wxFONTFAMILY_MODERN,
+      wxFONTSTYLE_NORMAL,
+      wxFONTWEIGHT_NORMAL
+    )
+  );
+
+  songDetailsSizer = new wxBoxSizer(wxHORIZONTAL);
+  songDetailsSizer->Add(musicNote, 0, wxALIGN_CENTRE);
+  songDetailsSizer->Add(details, 0, wxALL | wxALIGN_CENTRE_VERTICAL);
+
+  songDetailsContainer->SetSizer(songDetailsSizer);
+
   slider = new wxSlider(
     this,
     SLIDER,
@@ -88,11 +131,20 @@ Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wx
     wxALL | wxALIGN_CENTRE
   );
 
+  volume = new wxSlider(
+    this,
+    VOLUME,
+    0,
+    0,
+    100,
+    wxDefaultPosition,
+    wxSize(300, 30)
+  );
 
   divider = new wxBoxSizer(wxHORIZONTAL);
-  divider->AddStretchSpacer();
+  divider->Add(songDetailsContainer, 1);
   divider->Add(mainControls, 0);
-  divider->AddStretchSpacer();
+  divider->Add(volume, 1, wxALIGN_CENTRE);
 
   SetSizer(divider);
 }
@@ -101,6 +153,7 @@ void Controls::setMediaPlayer(wxString songDirectory, SongList* playlistArg)
 {
   playlist = playlistArg;
 
+  // Intializing mediaPlayer
   if (mediaPlayer == nullptr)
   {
     #ifdef linux
@@ -123,6 +176,61 @@ void Controls::setMediaPlayer(wxString songDirectory, SongList* playlistArg)
     delete updateslider; updateslider = nullptr;
   }
 
+  // Adding song to cache
+  songCache.push_back(songDirectory);
+
+  // Getting the file extension to display
+  wxString songExtension;
+  wxString songName;
+  bool found = false;
+  for (int i = (songDirectory.length() - 1); i >= 0; i--)
+  {
+    if (songDirectory[i] == '.' && !found)
+    {
+      songExtension = songDirectory.substr(i + 1);
+      found = true;
+    }
+
+    #ifdef linux
+      if (songDirectory[i] == '/')
+      {
+        songName = songDirectory.substr(i + 1);
+        for (int i = (songName.length() - 1); i >= 0; i--)
+        {
+          if (songName[i] == '.')
+          {
+            songName = songName.substr(0, i);
+            break;
+          }
+        }
+        break;
+      }
+    #endif
+    #ifdef _WIN32
+      if (songDirectory[i] == '\\')
+      {
+        songName = songDirectory.substr(i + 1);
+        for (int i = (songName.length() - 1); i >= 0; i--)
+        {
+          if (songName[i] == '.')
+          {
+            songName = songName.substr(0, i);
+            break;
+          }
+        }
+        break;
+      }
+    #endif
+  }
+
+  found = false;
+
+  if (songName.length() > 40)
+    details->SetLabel(songName);
+  else
+    details->SetLabel(songName + "\n" + songExtension);
+
+  // Loading song
   if (!mediaPlayer->Load(songDirectory))
   {
     std::cout << "!mediaPlayer->Load()" << std::endl;
@@ -141,6 +249,16 @@ void Controls::changeCurrentTimePlaying(wxScrollEvent& evt)
 {
   slider->SetValue(evt.GetPosition());
   mediaPlayer->Seek(evt.GetPosition() * 1000);
+}
+
+void Controls::previousSong(wxCommandEvent& evt)
+{
+  if (songCache.size() != 0)
+  {
+    if (!mediaPlayer->Load(songCache[songCache.size() - 1]))
+      std::cout << "!mediaPlayer->Load(...)" << std::endl;
+    songCache.pop_back();
+  }
 }
 
 void Controls::togglePause(wxCommandEvent& evt)
@@ -166,6 +284,42 @@ void Controls::togglePause(wxCommandEvent& evt)
       #endif
       setMediaPlayer(songDirectory, playlist);
       break;
+  }
+}
+
+void Controls::nextSong(wxCommandEvent& evt)
+{
+  if (playlist != nullptr)
+  {
+    int nextSongIndex;
+
+    switch (shuffleToggle)
+    {
+      case 0:
+        nextSongIndex = playlist->GetSelection() + 1;
+        if (nextSongIndex > (playlist->GetCount() - 1))
+          nextSongIndex = 0;
+        break;
+      case 1:
+        nextSongIndex = rand() % playlist->GetCount();
+        break;
+    }
+
+    wxString songName = playlist->GetString(nextSongIndex);
+    #ifdef linux
+      wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/" + songName;
+    #endif
+    #ifdef _WIN32
+      wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + songName;
+    #endif
+
+    if (!mediaPlayer->Load(songDirectory))
+    {
+      std::cout << "!mediaPlayer->Load(songDirectory)" << std::endl;
+      exit(1);
+    }
+
+    playlist->SetSelection(nextSongIndex);
   }
 }
 

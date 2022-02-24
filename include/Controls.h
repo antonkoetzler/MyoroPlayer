@@ -13,7 +13,8 @@ enum
   PLAY,
   NEXT,
   SHUFFLE,
-  MEDIA
+  MEDIA,
+  VOLUME
 };
 
 class Controls : public wxPanel
@@ -25,15 +26,20 @@ class Controls : public wxPanel
   void playSong(wxMediaEvent&);
   void changeCurrentTimePlaying(wxScrollEvent& evt);
 
-  //void previousSong(wxCommandEvent&);
+  void previousSong(wxCommandEvent&);
   void togglePause(wxCommandEvent&);
-  //void nextSong(wxCommandEvent&);
+  void nextSong(wxCommandEvent&);
   void toggleShuffle(wxCommandEvent&);
 
  private:
   DECLARE_EVENT_TABLE();
 
   wxBoxSizer* divider;
+    // What is playing, title, extension
+    wxPanel* songDetailsContainer;
+      wxBoxSizer* songDetailsSizer;
+        wxStaticBitmap* musicNote;
+        wxStaticText* details;
     // Play/pause, next, previous, shuffle, and music slider/gauge
     wxBoxSizer* mainControls;
       wxSlider* slider;
@@ -43,8 +49,11 @@ class Controls : public wxPanel
         wxButton* previous;
         wxButton* play;
         wxButton* next;
+    // Volume Control
+    wxSlider* volume;
 
   wxMediaCtrl* mediaPlayer = nullptr;
   UpdateSlider* updateslider = nullptr;
   SongList* playlist;
+  wxVector<wxString> songCache;
 };
