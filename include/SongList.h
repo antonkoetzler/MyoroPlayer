@@ -9,6 +9,7 @@ class SongList : public wxListBox
 {
  public:
   SongList(wxFrame*);
+  SongList(wxFrame*, wxString);
 
  private:
   wxDir* directory;

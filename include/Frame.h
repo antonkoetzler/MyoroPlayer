@@ -5,6 +5,12 @@
 #include "SongList.h"
 #include "Controls.h"
 
+enum
+{
+  SETDIRINPUT,
+  SETDIRBUTTON
+};
+
 class Frame : public wxFrame
 {
  public:
@@ -13,6 +19,8 @@ class Frame : public wxFrame
 
   void exit(wxCommandEvent&);
   void setControls(wxCommandEvent&);
+  void showSetDirectory(wxCommandEvent&);
+  void setDirectory(wxCommandEvent&);
 
  private:
   DECLARE_EVENT_TABLE();
@@ -28,4 +36,10 @@ class Frame : public wxFrame
 
   // Sizer to hold music controls and playlist
   wxBoxSizer* sizer;
+
+  // Window/frame for setting song directory
+  wxFrame* setDirectoryWindow;
+  wxBoxSizer* setDirectorySizer;
+  wxTextCtrl* setDirectoryInput;
+  wxButton* setDirectoryButton;
 };

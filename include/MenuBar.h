@@ -4,6 +4,7 @@
 
 enum
 {
+  SETDIR,
   ABOUT
 };
 
@@ -14,6 +15,7 @@ public:
 
 private:
   wxMenu* file;
+    wxMenuItem* fileSetDirectory;
     wxMenuItem* fileExit;
   wxMenu* help;
     wxMenuItem* helpAbout;

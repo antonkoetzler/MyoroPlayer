@@ -147,15 +147,17 @@ Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wx
   volume = new wxSlider(
     this,
     VOLUME,
-    0,
+    100,
     0,
     100,
     wxDefaultPosition,
-    wxSize(300, 30)
+    wxSize(250, 50)
   );
   divider = new wxBoxSizer(wxHORIZONTAL);
   divider->Add(songDetailsContainer, 0);
+  divider->AddStretchSpacer();
   divider->Add(mainControls, 0);
+  divider->AddStretchSpacer();
   divider->Add(volume, 0, wxALIGN_CENTRE);
 
   SetSizer(divider);
@@ -182,6 +184,8 @@ void Controls::setMediaPlayer(wxString songDirectory, SongList* playlistArg)
         wxMEDIABACKEND_WMP10 
       );
     #endif
+
+    mediaPlayer->SetVolume(1.0);
   }
   if (updateslider != nullptr)
   {
@@ -252,15 +256,22 @@ void Controls::setMediaPlayer(wxString songDirectory, SongList* playlistArg)
   updateslider = new UpdateSlider(slider, mediaPlayer, playlist);
 }
 
-void Controls::playSong(wxMediaEvent& evt)
-{
-  mediaPlayer->Play();
-}
+void Controls::playSong(wxMediaEvent& evt) { mediaPlayer->Play(); }
 
 void Controls::changeCurrentTimePlaying(wxScrollEvent& evt)
 {
-  slider->SetValue(evt.GetPosition());
-  mediaPlayer->Seek(evt.GetPosition() * 1000);
+  switch (evt.GetId())
+  {
+    case SLIDER:
+      slider->SetValue(evt.GetPosition());
+      mediaPlayer->Seek(evt.GetPosition() * 1000);
+      break;
+    case VOLUME:
+      volume->SetValue(evt.GetPosition());
+      double volume = (double)evt.GetPosition() / 100;
+      mediaPlayer->SetVolume(volume);
+      break;
+  }
 }
 
 void Controls::previousSong(wxCommandEvent& evt)
