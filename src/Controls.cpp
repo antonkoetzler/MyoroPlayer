@@ -11,7 +11,6 @@ END_EVENT_TABLE()
 
 Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wxDefaultPosition, size)
 {
-<<<<<<< HEAD
   songDetailsContainer = new wxPanel(
     this,
     wxID_ANY,
@@ -55,16 +54,6 @@ Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wx
 
   songDetailsContainer->SetSizer(songDetailsSizer);
 
-  slider = new wxSlider(
-    this,
-    SLIDER,
-    0,
-    0,
-    1,
-    wxDefaultPosition,
-    wxSize(400, 30)
-  );
-=======
   #ifdef linux
     slider = new wxSlider(
       this,
@@ -87,7 +76,6 @@ Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wx
       wxSize(400, 30)
     );
   #endif
->>>>>>> 0268178f7cb6c1f46a271ba77785f9ea78c7c167
 
   shuffle = new wxButton(
     this,
@@ -165,11 +153,10 @@ Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wx
     wxDefaultPosition,
     wxSize(300, 30)
   );
-
   divider = new wxBoxSizer(wxHORIZONTAL);
-  divider->Add(songDetailsContainer, 1);
+  divider->Add(songDetailsContainer, 0);
   divider->Add(mainControls, 0);
-  divider->Add(volume, 1, wxALIGN_CENTRE);
+  divider->Add(volume, 0, wxALIGN_CENTRE);
 
   SetSizer(divider);
 }
