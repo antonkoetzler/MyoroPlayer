@@ -18,6 +18,15 @@ MenuBar::MenuBar() : wxMenuBar()
   file->Append(fileSetDirectory);
   file->Append(fileExit);
 
+  viewShowControls = new wxMenuItem(
+    nullptr,
+    SHOWCONTROLS,
+    "Show controls"
+  );
+
+  view = new wxMenu();
+  view->Append(viewShowControls);
+
   helpAbout = new wxMenuItem(
     nullptr,
     ABOUT,
@@ -28,5 +37,6 @@ MenuBar::MenuBar() : wxMenuBar()
   help->Append(helpAbout);
 
   Append(file, "File");
+  Append(view, "View");
   Append(help, "Help");
 }

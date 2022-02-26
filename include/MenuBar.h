@@ -5,6 +5,7 @@
 enum
 {
   SETDIR,
+  SHOWCONTROLS,
   ABOUT
 };
 
@@ -17,6 +18,8 @@ private:
   wxMenu* file;
     wxMenuItem* fileSetDirectory;
     wxMenuItem* fileExit;
+  wxMenu* view;
+    wxMenuItem* viewShowControls;
   wxMenu* help;
     wxMenuItem* helpAbout;
 };

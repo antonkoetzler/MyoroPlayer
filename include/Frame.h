@@ -21,6 +21,7 @@ class Frame : public wxFrame
   void setControls(wxCommandEvent&);
   void showSetDirectory(wxCommandEvent&);
   void setDirectory(wxCommandEvent&);
+  void showControls(wxCommandEvent&);
 
  private:
   DECLARE_EVENT_TABLE();

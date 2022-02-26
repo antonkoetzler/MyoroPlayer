@@ -2,6 +2,7 @@
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(wxID_EXIT, Frame::exit)
+  EVT_MENU(SHOWCONTROLS, Frame::showControls)
   EVT_MENU(SETDIR, Frame::showSetDirectory)
   EVT_LISTBOX_DCLICK(SONGLIST, Frame::setControls)
   EVT_BUTTON(SETDIRBUTTON, Frame::setDirectory)
@@ -67,8 +68,8 @@ void Frame::showSetDirectory(wxCommandEvent& evt)
     SETDIRINPUT,
     wxEmptyString,
     wxDefaultPosition,
-    wxSize(250, 40),
-    wxTE_CENTRE | wxBORDER_NONE | wxTE_PROCESS_ENTER
+    wxSize(250, 20),
+    wxTE_CENTRE | wxBORDER_NONE | wxTE_PROCESS_ENTER | wxTE_CENTRE
   ); 
   setDirectoryButton = new wxButton(
     setDirectoryWindow,
@@ -96,4 +97,27 @@ void Frame::setDirectory(wxCommandEvent& evt)
   sizer->Add(playlist, 1, wxEXPAND);
   sizer->Add(controls, 0, wxEXPAND);
   sizer->Layout();
+
+  setDirectoryWindow->Close();
+  delete setDirectoryWindow; setDirectoryWindow = nullptr;
+  delete setDirectorySizer; setDirectorySizer = nullptr;
+  delete setDirectoryInput; setDirectoryInput = nullptr;
+  delete setDirectoryButton; setDirectoryButton = nullptr;
+}
+
+void Frame::showControls(wxCommandEvent& evt)
+{
+  if (controls != nullptr)
+  {
+    sizer->Detach(controls);
+    delete controls; controls = nullptr;
+    sizer->Layout();
+  }
+  else
+  {
+    wxSize controlsSize = wxSize(GetSize().GetWidth(), 115);
+    controls = new Controls(this, controlsSize);
+    sizer->Add(controls, 0, wxEXPAND);
+    sizer->Layout();
+  }
 }
