@@ -2,7 +2,6 @@
 
 BEGIN_EVENT_TABLE(Controls, wxPanel)
   EVT_MEDIA_LOADED(MEDIA, Controls::playSong)
-  EVT_MEDIA_FINISHED(MEDIA, Controls::changeSongText)
   EVT_SCROLL_THUMBRELEASE(Controls::changeCurrentTimePlaying)
   EVT_BUTTON(PREVIOUS, Controls::previousSong)
   EVT_BUTTON(PLAY, Controls::togglePause)
@@ -196,57 +195,6 @@ void Controls::setMediaPlayer(wxString songDirectory, SongList* playlistArg)
   // Adding song to cache
   songCache.push_back(songDirectory);
 
-  // Getting the file extension to display
-  wxString songExtension;
-  wxString songName;
-  bool found = false;
-  for (int i = (songDirectory.length() - 1); i >= 0; i--)
-  {
-    if (songDirectory[i] == '.' && !found)
-    {
-      songExtension = songDirectory.substr(i + 1);
-      found = true;
-    }
-
-    #ifdef linux
-      if (songDirectory[i] == '/')
-      {
-        songName = songDirectory.substr(i + 1);
-        for (int i = (songName.length() - 1); i >= 0; i--)
-        {
-          if (songName[i] == '.')
-          {
-            songName = songName.substr(0, i);
-            break;
-          }
-        }
-        break;
-      }
-    #endif
-    #ifdef _WIN32
-      if (songDirectory[i] == '\\')
-      {
-        songName = songDirectory.substr(i + 1);
-        for (int i = (songName.length() - 1); i >= 0; i--)
-        {
-          if (songName[i] == '.')
-          {
-            songName = songName.substr(0, i);
-            break;
-          }
-        }
-        break;
-      }
-    #endif
-  }
-
-  found = false;
-
-  if (songName.length() > 40)
-    details->SetLabel(songName);
-  else
-    details->SetLabel(songName + "\n" + songExtension);
-
   // Loading song
   if (!mediaPlayer->Load(songDirectory))
   {
@@ -257,7 +205,31 @@ void Controls::setMediaPlayer(wxString songDirectory, SongList* playlistArg)
   updateslider = new UpdateSlider(slider, mediaPlayer, playlist);
 }
 
-void Controls::playSong(wxMediaEvent& evt) { mediaPlayer->Play(); }
+void Controls::playSong(wxMediaEvent& evt)
+{
+  // Updating the song name and extension
+  // Parsing the string
+  wxString song = playlist->GetString(playlist->GetSelection());
+  wxString songExtension;
+  // Grabbing the extension and parsing
+  // song to only be the song name
+  for (int i = (song.length() - 1); i >= 0; i--)
+  {
+    if (song[i] == '.')
+    {
+      songExtension = song.substr(i + 1);
+      song = song.substr(0, i);
+      break;
+    }
+  }
+
+  if (song.length() > 40)
+    details->SetLabel(song);
+  else
+    details->SetLabel(song + "\n" + songExtension);
+
+  mediaPlayer->Play();
+}
 
 void Controls::changeCurrentTimePlaying(wxScrollEvent& evt)
 {

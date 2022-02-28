@@ -24,7 +24,6 @@ class Controls : public wxPanel
 
   void setMediaPlayer(wxString, SongList*);
   void playSong(wxMediaEvent&);
-  void changeSongText(wxMediaEvent&);
   void changeCurrentTimePlaying(wxScrollEvent& evt);
 
   void previousSong(wxCommandEvent&);

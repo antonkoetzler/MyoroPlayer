@@ -21,7 +21,7 @@ void UpdateSlider::Notify()
   slider->SetValue(songAtSeconds);
 
   // End of song condition
-  if (slider->GetValue() == slider->GetMax())
+  if (mediaPlayer->GetState() == wxMEDIASTATE_STOPPED)
   {
     int nextSongIndex = 0;
     wxString songName;
