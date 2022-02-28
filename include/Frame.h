@@ -1,6 +1,7 @@
 #pragma once
 
 #include <wx/wx.h>
+#include <wx/uiaction.h>
 #include "MenuBar.h"
 #include "SongList.h"
 #include "Controls.h"
@@ -8,7 +9,8 @@
 enum
 {
   SETDIRINPUT,
-  SETDIRBUTTON
+  SETDIRBUTTON,
+  QUEUE
 };
 
 class Frame : public wxFrame
@@ -22,6 +24,9 @@ class Frame : public wxFrame
   void showSetDirectory(wxCommandEvent&);
   void setDirectory(wxCommandEvent&);
   void showControls(wxCommandEvent&);
+  void songMenu(wxMouseEvent&);
+
+  void addToQueue(wxCommandEvent&);
 
  private:
   DECLARE_EVENT_TABLE();
@@ -43,4 +48,8 @@ class Frame : public wxFrame
   wxBoxSizer* setDirectorySizer;
   wxTextCtrl* setDirectoryInput;
   wxButton* setDirectoryButton;
+
+  // Apparently the queue vector needs to be placed here
+  // Or a weird error occurs if you do Controls::addToQueue
+  wxVector<wxString> queue;
 };

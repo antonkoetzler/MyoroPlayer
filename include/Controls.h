@@ -31,6 +31,8 @@ class Controls : public wxPanel
   void nextSong(wxCommandEvent&);
   void toggleShuffle(wxCommandEvent&);
 
+  void setQueue(wxVector<wxString>);
+
  private:
   DECLARE_EVENT_TABLE();
 
@@ -56,4 +58,5 @@ class Controls : public wxPanel
   UpdateSlider* updateslider = nullptr;
   SongList* playlist;
   wxVector<wxString> songCache;
+  wxVector<wxString> queue;
 };
