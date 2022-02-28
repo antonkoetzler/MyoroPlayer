@@ -5,6 +5,7 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(wxID_EXIT, Frame::exit)
   EVT_MENU(SHOWCONTROLS, Frame::showControls)
   EVT_MENU(SETDIR, Frame::showSetDirectory)
+  EVT_MENU(YT2MP3, Frame::showYt2Mp3)
 
   // Playlist/SongList events
   EVT_LISTBOX_DCLICK(SONGLIST, Frame::setControls)
@@ -14,7 +15,9 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
 
   // Set directory events
   EVT_BUTTON(SETDIRBUTTON, Frame::setDirectory)
+  EVT_BUTTON(YT2MP3BUTTON, Frame::Yt2Mp3)
   EVT_TEXT_ENTER(SETDIRINPUT, Frame::setDirectory)
+  EVT_TEXT_ENTER(YT2MP3INPUT, Frame::Yt2Mp3)
 END_EVENT_TABLE()
 
 Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wxSize(1000, 800))
@@ -168,4 +171,50 @@ void Frame::addToQueue(wxCommandEvent& evt)
 
   queue.push_back(songDirectory);
   controls->setQueue(queue);
+}
+
+void Frame::showYt2Mp3(wxCommandEvent& evt)
+{
+  // Creating the window
+  setterWindow = new wxFrame(
+    this,
+    wxID_ANY,
+    "Convert YouTube Link to MP3",
+    wxDefaultPosition,
+    wxSize(250, 70)
+  );
+  setterWindow->Show(true);
+  setterWindow->Centre();
+
+  // Creating window controls
+  setterWindowSizer = new wxBoxSizer(wxVERTICAL);
+
+  setterWindowInput = new wxTextCtrl(
+    setterWindow,
+    YT2MP3INPUT,
+    wxEmptyString,
+    wxDefaultPosition,
+    wxSize(250, 20),
+    wxTE_CENTRE | wxBORDER_NONE | wxTE_PROCESS_ENTER | wxTE_CENTRE
+  ); 
+  setterWindowButton = new wxButton(
+    setterWindow,
+    YT2MP3BUTTON,
+    "Convert to MP3",
+    wxDefaultPosition,
+    wxSize(250, 30),
+    wxBORDER_NONE
+  );
+
+  setterWindowSizer->Add(setterWindowInput, 0, wxEXPAND);
+  setterWindowSizer->Add(setterWindowButton, 0, wxEXPAND);
+
+  setterWindow->SetSizerAndFit(setterWindowSizer);
+
+  setterWindowInput->SetFocus();
+}
+
+void Frame::Yt2Mp3(wxCommandEvent& evt)
+{
+  wxExecute("python");
 }

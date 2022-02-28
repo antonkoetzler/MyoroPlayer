@@ -8,6 +8,12 @@ MenuBar::MenuBar() : wxMenuBar()
     "Set Directory\tCtrl+W"
   );
 
+  fileYt2Mp3 = new wxMenuItem(
+    nullptr,
+    YT2MP3,
+    "Youtube to MP3 Conversion\tCtrl+Shift+W"
+  );
+
   fileExit = new wxMenuItem(
     nullptr,
     wxID_EXIT,
@@ -16,6 +22,7 @@ MenuBar::MenuBar() : wxMenuBar()
 
   file = new wxMenu();
   file->Append(fileSetDirectory);
+  file->Append(fileYt2Mp3);
   file->Append(fileExit);
 
   viewShowControls = new wxMenuItem(

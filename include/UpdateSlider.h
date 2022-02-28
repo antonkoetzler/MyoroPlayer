@@ -15,6 +15,7 @@ class UpdateSlider : public wxTimer
   void Notify() wxOVERRIDE;
   void setShuffleToggle(int);
   void setQueue(wxVector<wxString>);
+  wxString getTempSongDirectory();
 
  private:
   wxSlider* slider;
@@ -22,4 +23,5 @@ class UpdateSlider : public wxTimer
   SongList* playlist;
   int shuffleToggle = 0;
   wxVector<wxString> queue;
+  wxString tempSongDirectory = wxEmptyString; // For adding to control's songCache
 };

@@ -79,14 +79,20 @@ void UpdateSlider::Notify()
       playlist->SetSelection(playlist->FindString(songName));
     }
 
+    tempSongDirectory = songDirectory;
+
     if (!mediaPlayer->Load(songDirectory))
     {
       std::cout << "!mediaPlayer->Load(songDirectory)" << std::endl;
       exit(1);
     }
+
+    tempSongDirectory = wxEmptyString;
   }
 }
 
 void UpdateSlider::setShuffleToggle(int shuffleToggleArg) { shuffleToggle = shuffleToggleArg; }
 
 void UpdateSlider::setQueue(wxVector<wxString> queueArg) { queue = queueArg; }
+
+wxString UpdateSlider::getTempSongDirectory() { return tempSongDirectory; }

@@ -228,6 +228,10 @@ void Controls::playSong(wxMediaEvent& evt)
   else
     details->SetLabel(song + "\n" + songExtension);
 
+  // Checking if this is loaded from a UpdateSlider call
+  if (updateslider->getTempSongDirectory() != wxEmptyString)
+    songCache.push_back(updateslider->getTempSongDirectory());
+
   mediaPlayer->Play();
 }
 
@@ -268,17 +272,6 @@ void Controls::togglePause(wxCommandEvent& evt)
       break;
     case wxMEDIASTATE_PAUSED:
       mediaPlayer->Play();
-      break;
-    case wxMEDIASTATE_STOPPED:
-      // Plays the first song of the playlist
-      wxString songName = playlist->GetString(0);
-      #ifdef linux
-        wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/" + songName;
-      #endif
-      #ifdef _WIN32
-        wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + songName;
-      #endif
-      setMediaPlayer(songDirectory, playlist);
       break;
   }
 }
@@ -342,6 +335,8 @@ void Controls::nextSong(wxCommandEvent& evt)
       }
       playlist->SetSelection(playlist->FindString(songName));
     }
+
+    songCache.push_back(songDirectory);
 
     if (!mediaPlayer->Load(songDirectory))
     {
