@@ -2,6 +2,7 @@
 
 BEGIN_EVENT_TABLE(Controls, wxPanel)
   EVT_MEDIA_LOADED(MEDIA, Controls::playSong)
+  EVT_MEDIA_FINISHED(MEDIA, Controls::changeSongText)
   EVT_SCROLL_THUMBRELEASE(Controls::changeCurrentTimePlaying)
   EVT_BUTTON(PREVIOUS, Controls::previousSong)
   EVT_BUTTON(PLAY, Controls::togglePause)
@@ -314,7 +315,7 @@ void Controls::nextSong(wxCommandEvent& evt)
 {
   if (playlist != nullptr)
   {
-    int nextSongIndex;
+    int nextSongIndex = 0;
     wxString songName;
     wxString songDirectory;
 
@@ -398,4 +399,5 @@ void Controls::setQueue(wxVector<wxString> queueArg)
 {
   for (size_t i = 0; i < queueArg.size(); i++)
     queue.push_back(queueArg[i]);
+  updateslider->setQueue(queue);
 }

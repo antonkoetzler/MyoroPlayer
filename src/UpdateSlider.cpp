@@ -24,39 +24,69 @@ void UpdateSlider::Notify()
   if (slider->GetValue() == slider->GetMax())
   {
     int nextSongIndex = 0;
-    // Checking if we're on shuffle or not
-    switch (shuffleToggle)
-    {
-      case 0:
-        nextSongIndex = playlist->GetSelection() + 1;
-        if (nextSongIndex > (playlist->GetCount() - 1))
-          nextSongIndex = 0;
-        break;
-      case 1:
-        nextSongIndex = rand() % playlist->GetCount();
-        break;
-    }
+    wxString songName;
+    wxString songDirectory;
 
-    // Loading the song
-    wxString songName = playlist->GetString(nextSongIndex);
-    #ifdef linux
-      wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/" + songName;
-    #endif
-    #ifdef _WIN32
-      wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + songName;
-    #endif
+    if (queue.empty())
+    {
+      switch (shuffleToggle)
+      {
+        case 0:
+          nextSongIndex = playlist->GetSelection() + 1;
+          if (nextSongIndex > (playlist->GetCount() - 1))
+            nextSongIndex = 0;
+          break;
+        case 1:
+          nextSongIndex = rand() % playlist->GetCount();
+          break;
+      }
+
+      songName = playlist->GetString(nextSongIndex);
+      playlist->SetSelection(nextSongIndex);
+
+      #ifdef linux
+        songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/" + songName;
+      #endif
+      #ifdef _WIN32
+        songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + songName;
+      #endif
+    }
+    else
+    {
+      songDirectory = queue[queue.size() - 1];
+      queue.pop_back();
+
+      // Setting the selection
+      for (int i = (songDirectory.length() - 1); i >= 0; i--)
+      {
+        #ifdef linux
+          if (songDirectory[i] == '/')
+          {
+            std::cout << songDirectory[i] << std::endl;
+            std::cout << songDirectory << "songidr" << std::endl;
+            songName = songDirectory.substr(i + 1);
+            break;
+          }
+        #endif
+        #ifdef _WIN32
+          if (songDirectory[i] == '\\')
+          {
+            songName = songDirectory.substr(i + 1);
+            break;
+          }
+        #endif
+      }
+      playlist->SetSelection(playlist->FindString(songName));
+    }
 
     if (!mediaPlayer->Load(songDirectory))
     {
       std::cout << "!mediaPlayer->Load(songDirectory)" << std::endl;
       exit(1);
     }
-
-    playlist->SetSelection(nextSongIndex);
   }
 }
 
-void UpdateSlider::setShuffleToggle(int shuffleToggleArg)
-{
-  shuffleToggle = shuffleToggleArg;
-}
+void UpdateSlider::setShuffleToggle(int shuffleToggleArg) { shuffleToggle = shuffleToggleArg; }
+
+void UpdateSlider::setQueue(wxVector<wxString> queueArg) { queue = queueArg; }
