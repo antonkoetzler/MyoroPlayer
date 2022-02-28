@@ -69,20 +69,17 @@ SongList::SongList(wxFrame* parent, wxString playlistDirectory) : wxListBox(pare
 
   while (get)
   {
-    // Getting the file extension
+    // Getting file extension
     for (int i = (fileName.length() - 1); i >= 0; i--)
-    {
       if (fileName[i] == '.')
-      {
         fileExtension = fileName.substr(i + 1);
+    fileExtension = fileExtension.MakeUpper();
 
-        // Checking if the fileExtension is appropriate
-        for (int i = 0; i < 3; i++)
-          if (fileExtension[i] == allowedExtensions[i])
-            break;
-
+    for (int i = 0; i < 3; i++)
+    {
+      if (fileExtension == allowedExtensions[i])
+      {
         Append(fileName);
-
         break;
       }
     }

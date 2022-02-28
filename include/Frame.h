@@ -43,11 +43,11 @@ class Frame : public wxFrame
   // Sizer to hold music controls and playlist
   wxBoxSizer* sizer;
 
-  // Window/frame for setting song directory
-  wxFrame* setDirectoryWindow;
-  wxBoxSizer* setDirectorySizer;
-  wxTextCtrl* setDirectoryInput;
-  wxButton* setDirectoryButton;
+  // Window/frame for setting song directory and youtube2mp3 conversion
+  wxFrame* setterWindow;
+  wxBoxSizer* setterWindowSizer;
+  wxTextCtrl* setterWindowInput;
+  wxButton* setterWindowButton;
 
   // Apparently the queue vector needs to be placed here
   // Or a weird error occurs if you do Controls::addToQueue

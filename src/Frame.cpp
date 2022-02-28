@@ -64,29 +64,29 @@ void Frame::setControls(wxCommandEvent& evt)
 void Frame::showSetDirectory(wxCommandEvent& evt)
 {
   // Creating the window
-  setDirectoryWindow = new wxFrame(
+  setterWindow = new wxFrame(
     this,
     wxID_ANY,
     "Set Directory",
     wxDefaultPosition,
     wxSize(250, 70)
   );
-  setDirectoryWindow->Show(true);
-  setDirectoryWindow->Centre();
+  setterWindow->Show(true);
+  setterWindow->Centre();
 
   // Creating window controls
-  setDirectorySizer = new wxBoxSizer(wxVERTICAL);
+  setterWindowSizer = new wxBoxSizer(wxVERTICAL);
 
-  setDirectoryInput = new wxTextCtrl(
-    setDirectoryWindow,
+  setterWindowInput = new wxTextCtrl(
+    setterWindow,
     SETDIRINPUT,
     wxEmptyString,
     wxDefaultPosition,
     wxSize(250, 20),
     wxTE_CENTRE | wxBORDER_NONE | wxTE_PROCESS_ENTER | wxTE_CENTRE
   ); 
-  setDirectoryButton = new wxButton(
-    setDirectoryWindow,
+  setterWindowButton = new wxButton(
+    setterWindow,
     SETDIRBUTTON,
     "Set Directory",
     wxDefaultPosition,
@@ -94,29 +94,32 @@ void Frame::showSetDirectory(wxCommandEvent& evt)
     wxBORDER_NONE
   );
 
-  setDirectorySizer->Add(setDirectoryInput, 0, wxEXPAND);
-  setDirectorySizer->Add(setDirectoryButton, 0, wxEXPAND);
+  setterWindowSizer->Add(setterWindowInput, 0, wxEXPAND);
+  setterWindowSizer->Add(setterWindowButton, 0, wxEXPAND);
 
-  setDirectoryWindow->SetSizerAndFit(setDirectorySizer);
+  setterWindow->SetSizerAndFit(setterWindowSizer);
 
-  setDirectoryInput->SetFocus();
+  setterWindowInput->SetFocus();
 }
 
 void Frame::setDirectory(wxCommandEvent& evt)
 {
+  bool setControls;
+  if (sizer->GetItemCount() == 2)
+    setControls = true;
+  else
+    setControls = false;
+
   delete playlist; playlist = nullptr;
-  playlist = new SongList(this, setDirectoryInput->GetLineText(0));
+  playlist = new SongList(this, setterWindowInput->GetLineText(0));
 
   sizer->Clear(false);
   sizer->Add(playlist, 1, wxEXPAND);
-  sizer->Add(controls, 0, wxEXPAND);
+  if (setControls) sizer->Add(controls, 0, wxEXPAND);
   sizer->Layout();
 
-  setDirectoryWindow->Close();
-  delete setDirectoryWindow; setDirectoryWindow = nullptr;
-  delete setDirectorySizer; setDirectorySizer = nullptr;
-  delete setDirectoryInput; setDirectoryInput = nullptr;
-  delete setDirectoryButton; setDirectoryButton = nullptr;
+  setterWindow->Close();
+  delete setterWindow; setterWindow = nullptr;
 }
 
 void Frame::showControls(wxCommandEvent& evt)
