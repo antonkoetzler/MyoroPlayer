@@ -39,6 +39,12 @@ class Frame : public wxFrame
 
   // Holds the playlist
   SongList* playlist;
+  #ifdef linux
+    wxString playlistDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/";
+  #endif
+  #ifdef _WIN32
+    wxString playlistDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\";
+  #endif
 
   // Holds the music controls, slider, etc
   Controls* controls = nullptr;

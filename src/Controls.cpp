@@ -9,8 +9,10 @@ BEGIN_EVENT_TABLE(Controls, wxPanel)
   EVT_BUTTON(SHUFFLE, Controls::toggleShuffle)
 END_EVENT_TABLE()
 
-Controls::Controls(wxFrame* parent, wxSize& size) : wxPanel(parent, wxID_ANY, wxDefaultPosition, size)
+Controls::Controls(wxFrame* parent, wxSize& size, wxString playlistDirectoryArg) : wxPanel(parent, wxID_ANY, wxDefaultPosition, size)
 {
+  playlistDirectory = playlistDirectoryArg;
+
   songDetailsContainer = new wxPanel(
     this,
     wxID_ANY,
@@ -301,12 +303,7 @@ void Controls::nextSong(wxCommandEvent& evt)
       songName = playlist->GetString(nextSongIndex);
       playlist->SetSelection(nextSongIndex);
 
-      #ifdef linux
-        songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/" + songName;
-      #endif
-      #ifdef _WIN32
-        songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + songName;
-      #endif
+      wxString songDirectory = playlistDirectory + songName;
     }
     else
     {
@@ -319,8 +316,6 @@ void Controls::nextSong(wxCommandEvent& evt)
         #ifdef linux
           if (songDirectory[i] == '/')
           {
-            std::cout << songDirectory[i] << std::endl;
-            std::cout << songDirectory << "songidr" << std::endl;
             songName = songDirectory.substr(i + 1);
             break;
           }

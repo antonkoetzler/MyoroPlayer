@@ -45,8 +45,18 @@ SongList::SongList(wxFrame* parent) : wxListBox(parent, SONGLIST)
   }
 }
 
-SongList::SongList(wxFrame* parent, wxString playlistDirectory) : wxListBox(parent, SONGLIST)
+SongList::SongList(wxFrame* parent, wxString playlistDirectoryArg) : wxListBox(parent, SONGLIST)
 {
+  playlistDirectory = playlistDirectoryArg;
+  #ifdef linux
+    if (playlistDirectory[playlistDirectory.length() - 1] != '/')
+      playlistDirectory += '/';
+  #endif
+  #ifdef _WIN32
+    if (playlistDirectory[playlistDirectory.length() - 1] != '\\')
+      playlistDirectory += '\\';
+  #endif
+
   // Initialization
   #ifdef linux
     directory = new wxDir(playlistDirectory);
@@ -87,3 +97,5 @@ SongList::SongList(wxFrame* parent, wxString playlistDirectory) : wxListBox(pare
     get = directory->GetNext(&fileName);
   }
 }
+
+wxString SongList::getDirectory() { return playlistDirectory; }

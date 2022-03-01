@@ -21,6 +21,7 @@ class UpdateSlider : public wxTimer
   wxSlider* slider;
   wxMediaCtrl* mediaPlayer;
   SongList* playlist;
+  wxString playlistDirectory;
   int shuffleToggle = 0;
   wxVector<wxString> queue;
   wxString tempSongDirectory = wxEmptyString; // For adding to control's songCache

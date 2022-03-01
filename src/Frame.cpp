@@ -30,7 +30,7 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wx
   playlist = new SongList(this);
 
   wxSize controlsSize = wxSize(GetSize().GetWidth(), 115);
-  controls = new Controls(this, controlsSize);
+  controls = new Controls(this, controlsSize, playlistDirectory);
   controls->Hide();
 
   sizer = new wxBoxSizer(wxVERTICAL);
@@ -54,12 +54,7 @@ void Frame::setControls(wxCommandEvent& evt)
     sizer->Layout();
   }
 
-  #ifdef linux
-    wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/" + evt.GetString();
-  #endif
-  #ifdef _WIN32
-    wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + evt.GetString();
-  #endif
+  wxString songDirectory = playlistDirectory + evt.GetString();
 
   controls->setMediaPlayer(songDirectory, playlist);
 }
@@ -116,6 +111,18 @@ void Frame::setDirectory(wxCommandEvent& evt)
   delete playlist; playlist = nullptr;
   playlist = new SongList(this, setterWindowInput->GetLineText(0));
 
+  #ifdef linux
+    if (setterWindowInput->GetLineText(0)[setterWindowInput->GetLineText(0).length() - 1] != '/')
+      playlistDirectory = setterWindowInput->GetLineText(0) + '/';
+  #endif
+  #ifdef _WIN32
+    if (setterWindowInput->GetLineText(0)[setterWindowInput->GetLineText(0).length() - 1] != '\\')
+      playlistDirectory = setterWindowInput->GetLineText(0) + '\\';
+  #endif
+    else
+      playlistDirectory = setterWindowInput->GetLineText(0);
+  
+
   sizer->Clear(false);
   sizer->Add(playlist, 1, wxEXPAND);
   if (setControls) sizer->Add(controls, 0, wxEXPAND);
@@ -162,12 +169,7 @@ void Frame::addToQueue(wxCommandEvent& evt)
 {
   wxString songName = playlist->GetString(playlist->GetSelection());
 
-  #ifdef linux
-    wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/" + songName;
-  #endif
-  #ifdef _WIN32
-    wxString songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + songName;
-  #endif
+  wxString songDirectory = playlistDirectory + songName;
 
   queue.push_back(songDirectory);
   controls->setQueue(queue);

@@ -5,6 +5,7 @@ UpdateSlider::UpdateSlider(wxSlider* sliderArg, wxMediaCtrl* mediaPlayerArg, Son
   slider = sliderArg;
   mediaPlayer = mediaPlayerArg;
   playlist = playlistArg;
+  playlistDirectory = playlist->getDirectory();
   Start(500);
 }
 
@@ -44,12 +45,7 @@ void UpdateSlider::Notify()
       songName = playlist->GetString(nextSongIndex);
       playlist->SetSelection(nextSongIndex);
 
-      #ifdef linux
-        songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/" + songName;
-      #endif
-      #ifdef _WIN32
-        songDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\" + songName;
-      #endif
+      songDirectory = playlistDirectory + songName;
     }
     else
     {

@@ -20,7 +20,7 @@ enum
 class Controls : public wxPanel
 {
  public:
-  Controls(wxFrame*, wxSize&);
+  Controls(wxFrame*, wxSize&, wxString);
 
   void setMediaPlayer(wxString, SongList*);
   void playSong(wxMediaEvent&);
@@ -57,6 +57,7 @@ class Controls : public wxPanel
   wxMediaCtrl* mediaPlayer = nullptr;
   UpdateSlider* updateslider = nullptr;
   SongList* playlist;
+  wxString playlistDirectory;
   wxVector<wxString> songCache;
   wxVector<wxString> queue;
 };
