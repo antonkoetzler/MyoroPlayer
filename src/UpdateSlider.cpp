@@ -58,8 +58,6 @@ void UpdateSlider::Notify()
         #ifdef linux
           if (songDirectory[i] == '/')
           {
-            std::cout << songDirectory[i] << std::endl;
-            std::cout << songDirectory << "songidr" << std::endl;
             songName = songDirectory.substr(i + 1);
             break;
           }
