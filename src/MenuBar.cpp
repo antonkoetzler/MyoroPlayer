@@ -11,5 +11,15 @@ MenuBar::MenuBar() : wxMenuBar()
   file = new wxMenu();
   file->Append(fileExit);
 
+  viewShowControls = new wxMenuItem(
+    nullptr,
+    SHOWCONTROLS,
+    "Show controls"
+  );
+
+  view = new wxMenu();
+  view->Append(viewShowControls);
+
   Append(file, "File");
+  Append(view, "View");
 }

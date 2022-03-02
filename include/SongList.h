@@ -1,12 +1,15 @@
 #pragma once
 
 #include <wx/wx.h>
-#include <wx/listctrl.h>
+#include <wx/dir.h>
 
-class SongList : public wxListCtrl
+enum { SONGLIST };
+
+class SongList : public wxListBox
 {
  public:
   SongList(wxFrame*);
 
  private:
+  wxDir* directory;
 };

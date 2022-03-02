@@ -3,6 +3,7 @@
 #include <wx/wx.h>
 #include "MenuBar.h"
 #include "SongList.h"
+#include "Controls.h"
 
 class Frame : public wxFrame
 {
@@ -12,6 +13,10 @@ class Frame : public wxFrame
 
   // Menubar functions
   void exit(wxCommandEvent&);
+  void showControls(wxCommandEvent&);
+
+  // Playlist events
+  void setControls(wxCommandEvent&);
 
  private:
   DECLARE_EVENT_TABLE();
@@ -21,4 +26,5 @@ class Frame : public wxFrame
   // Holds playlist and controls
   wxBoxSizer* sizer;
     SongList* playlist;
+    Controls* controls;
 };

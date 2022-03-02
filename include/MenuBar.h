@@ -2,6 +2,8 @@
 
 #include <wx/wx.h>
 
+enum { SHOWCONTROLS };
+
 class MenuBar : public wxMenuBar
 {
  public:
@@ -10,4 +12,6 @@ class MenuBar : public wxMenuBar
  private:
   wxMenu* file;
     wxMenuItem* fileExit;
+  wxMenu* view;
+    wxMenuItem* viewShowControls;
 };
