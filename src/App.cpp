@@ -6,5 +6,6 @@ bool App::OnInit()
 {
   mainWindow = new Frame();
   mainWindow->Show(true);
+
   return true;
 }
