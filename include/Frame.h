@@ -25,6 +25,7 @@ class Frame : public wxFrame
   void setControls(wxCommandEvent&);
   void showSetDirectory(wxCommandEvent&);
   void setDirectory(wxCommandEvent&);
+  void refreshDirectory(wxCommandEvent&);
   void showControls(wxCommandEvent&);
   void songMenu(wxMouseEvent&);
   void showYt2Mp3(wxCommandEvent&);

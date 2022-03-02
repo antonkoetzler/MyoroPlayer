@@ -90,3 +90,4 @@ void UpdateSlider::setShuffleToggle(int shuffleToggleArg) { shuffleToggle = shuf
 void UpdateSlider::setQueue(wxVector<wxString> queueArg) { queue = queueArg; }
 
 wxString UpdateSlider::getTempSongDirectory() { return tempSongDirectory; }
+

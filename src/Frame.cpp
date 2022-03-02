@@ -3,6 +3,7 @@
 BEGIN_EVENT_TABLE(Frame, wxFrame)
   // Menu events
   EVT_MENU(wxID_EXIT, Frame::exit)
+  EVT_MENU(REFRESH, Frame::refreshDirectory)
   EVT_MENU(SHOWCONTROLS, Frame::showControls)
   EVT_MENU(SETDIR, Frame::showSetDirectory)
   EVT_MENU(YT2MP3, Frame::showYt2Mp3)
@@ -132,6 +133,23 @@ void Frame::setDirectory(wxCommandEvent& evt)
   delete setterWindow; setterWindow = nullptr;
 }
 
+void Frame::refreshDirectory(wxCommandEvent& evt)
+{
+  bool setControls;
+  if (sizer->GetItemCount() == 2) setControls = true;
+  else setControls = false;
+
+  sizer->Clear(false);
+
+  delete playlist; playlist = nullptr;
+  playlist = new SongList(this, playlistDirectory);
+
+  sizer->Add(playlist, 1, wxEXPAND);
+  if (setControls) sizer->Add(controls, 0, wxEXPAND);
+
+  sizer->Layout();
+}
+
 void Frame::showControls(wxCommandEvent& evt)
 {
   if (sizer->GetItemCount() == 2)
@@ -218,5 +236,18 @@ void Frame::showYt2Mp3(wxCommandEvent& evt)
 
 void Frame::Yt2Mp3(wxCommandEvent& evt)
 {
-  wxExecute("python");
+  // Making the youtube-dl command
+  wxString command = "youtube-dl --extract-audio --audio-format mp3 -o \"" + playlistDirectory + "%(title)s-%(id)s.mp3\" " + setterWindowInput->GetLineText(0);
+  wxExecute(command);
+
+  wxMessageDialog* message = new wxMessageDialog(
+    nullptr,
+    "Make sure to refresh your playlist directory\nafter the download has completed",
+    wxEmptyString,
+    wxOK | wxCENTRE
+  );
+  message->ShowModal();
+
+  setterWindow->Close();
+  delete setterWindow; setterWindow = nullptr;
 }

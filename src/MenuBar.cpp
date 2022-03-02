@@ -25,6 +25,12 @@ MenuBar::MenuBar() : wxMenuBar()
   file->Append(fileYt2Mp3);
   file->Append(fileExit);
 
+  viewRefresh = new wxMenuItem(
+    nullptr,
+    REFRESH,
+    "Refresh playlist directory\tF5"
+  );
+
   viewShowControls = new wxMenuItem(
     nullptr,
     SHOWCONTROLS,
@@ -32,6 +38,7 @@ MenuBar::MenuBar() : wxMenuBar()
   );
 
   view = new wxMenu();
+  view->Append(viewRefresh);
   view->Append(viewShowControls);
 
   helpAbout = new wxMenuItem(
