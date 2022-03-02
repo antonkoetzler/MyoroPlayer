@@ -15,15 +15,28 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
 void Controls::setMusicControls()
 {
   // Slider
-  slider = new wxSlider(
-    this,
-    wxID_ANY,
-    10,
-    0,
-    100,
-    wxDefaultPosition,
-    wxSize(350, 30)
-  );
+  #ifdef linux
+    slider = new wxSlider(
+      this,
+      wxID_ANY,
+      10,
+      0,
+      100,
+      wxDefaultPosition,
+      wxSize(350, 40)
+    );
+  #endif
+  #ifdef _WIN32
+    slider = new wxSlider(
+      this,
+      wxID_ANY,
+      10,
+      0,
+      100,
+      wxDefaultPosition,
+      wxSize(350, 30)
+    );
+  #endif
 
   // Buttons
   shuffle = new wxButton(
@@ -67,6 +80,11 @@ void Controls::setMusicControls()
 
   // Sizer
   musicControls = new wxBoxSizer(wxVERTICAL);
-  musicControls->Add(slider, 0, wxALL, 5);
+  #ifdef linux
+    musicControls->Add(slider, 0, wxTOP, 5);
+  #endif
+  #ifdef _WIN32
+    musicControls->Add(slider, 0, wxALL, 5);
+  #endif
   musicControls->Add(buttons, 0, wxALIGN_CENTRE);
 }
