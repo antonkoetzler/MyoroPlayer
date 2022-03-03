@@ -12,7 +12,7 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
     0,
     100,
     wxDefaultPosition,
-    wxSize(200, 30)
+    wxSize(210, 35)
   );
 
   divider = new wxBoxSizer(wxHORIZONTAL);
@@ -133,7 +133,7 @@ void Controls::setSongInformation()
     wxID_ANY,
     "Song Name\nSong Extension",
     wxDefaultPosition,
-    wxSize(110, 40)
+    wxSize(120, 35)
   );
   fileDetails->SetFont(
     wxFont(
