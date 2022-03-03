@@ -133,7 +133,7 @@ void Controls::setSongInformation()
     wxID_ANY,
     "Song Name\nSong Extension",
     wxDefaultPosition,
-    wxSize(120, 35)
+    wxSize(120, 40)
   );
   fileDetails->SetFont(
     wxFont(
