@@ -12,7 +12,7 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
     0,
     100,
     wxDefaultPosition,
-    wxSize(200, 90)
+    wxSize(200, 30)
   );
 
   divider = new wxBoxSizer(wxHORIZONTAL);
@@ -20,7 +20,7 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
   divider->AddStretchSpacer();
   divider->Add(musicControls, 0);
   divider->AddStretchSpacer();
-  divider->Add(volume, 0);
+  divider->Add(volume, 0, wxALIGN_CENTRE);
 
   SetSizer(divider);
 }
@@ -134,6 +134,14 @@ void Controls::setSongInformation()
     "Song Name\nSong Extension",
     wxDefaultPosition,
     wxSize(110, 40)
+  );
+  fileDetails->SetFont(
+    wxFont(
+      12,
+      wxFONTFAMILY_DEFAULT,
+      wxFONTSTYLE_NORMAL,
+      wxFONTWEIGHT_NORMAL
+    )
   );
 
   // Setting up songInformation

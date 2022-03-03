@@ -63,7 +63,7 @@ void Frame::showSetDirectory(wxCommandEvent& evt)
     SETDIRINPUT,
     wxEmptyString,
     wxDefaultPosition,
-    wxSize(250, 30),
+    wxSize(250, 23),
     wxTE_CENTRE | wxTE_PROCESS_ENTER
   );
 
@@ -99,6 +99,8 @@ void Frame::setDirectory(wxCommandEvent& evt)
     if (newDirectory[newDirectory.length() - 1] != '\\')
       newDirectory += '\\';
   #endif
+
+  if (newDirectory == wxEmptyString) std::cout << "Empty" << std::endl;
 
   // Checking if the directory is valid
   wxDir* dirTest = new wxDir(newDirectory);
