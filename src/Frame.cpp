@@ -89,21 +89,23 @@ void Frame::showSetDirectory(wxCommandEvent& evt)
 
 void Frame::setDirectory(wxCommandEvent& evt)
 {
-  playlistDirectory = input->GetLineText(0);
-  // Adding a slash to playlistDirectory if it doesn't have one at the end
+  wxString newDirectory = input->GetLineText(0);
+  // Adding a slash to string if it doesn't have one at the end
   #ifdef linux
-    if (playlistDirectory[playlistDirectory.length() - 1] != '/')
-      playlistDirectory += '/';
+    if (newDirectory[newDirectory.length() - 1] != '/')
+      newDirectory += '/';
   #endif
   #ifdef _WIN32
-    if (playlistDirectory[playlistDirectory.length() - 1] != '\\')
-      playlistDirectory += '\\';
+    if (newDirectory[newDirectory.length() - 1] != '\\')
+      newDirectory += '\\';
   #endif
 
   // Checking if the directory is valid
-  wxDir* dirTest = new wxDir(playlistDirectory);
+  wxDir* dirTest = new wxDir(newDirectory);
   if (dirTest->IsOpened())
   {
+    playlistDirectory = newDirectory;
+
     sizer->Clear(false);
 
     delete playlist; playlist = nullptr;

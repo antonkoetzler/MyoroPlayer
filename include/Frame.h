@@ -41,5 +41,10 @@ class Frame : public wxFrame
   wxTextCtrl* input;
   wxButton* button;
 
-  wxString playlistDirectory;
+  #ifdef linux
+    wxString playlistDirectory = "../songs/";
+  #endif
+  #ifdef _WIN32
+    wxString playlistDirectory = "..\\songs\\";
+  #endif
 };
