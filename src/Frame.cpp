@@ -4,9 +4,14 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   // Menubar events
   EVT_MENU(wxID_EXIT, Frame::exit)
   EVT_MENU(SHOWCONTROLS, Frame::showControls)
+  EVT_MENU(SETDIR, Frame::showSetDirectory)
 
   // Playlist events
   EVT_LISTBOX_DCLICK(SONGLIST, Frame::setControls)
+
+  // popupWindow events
+  EVT_TEXT_ENTER(SETDIRINPUT, Frame::setDirectory)
+  EVT_BUTTON(SETDIRBUTTON, Frame::setDirectory)
 END_EVENT_TABLE()
 
 Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wxSize(1000, 800))
@@ -42,5 +47,79 @@ void Frame::showControls(wxCommandEvent& evt)
 
 void Frame::setControls(wxCommandEvent& evt)
 {
-  std::cout << "Hello" << std::endl;
+  std::cout << evt.GetString() << std::endl;
+}
+
+void Frame::showSetDirectory(wxCommandEvent& evt)
+{
+  popupWindow = new wxFrame(
+    this,
+    wxID_ANY,
+    "Set Directory/Playlist"
+  );
+
+  input = new wxTextCtrl(
+    popupWindow,
+    SETDIRINPUT,
+    wxEmptyString,
+    wxDefaultPosition,
+    wxSize(250, 30),
+    wxTE_CENTRE | wxTE_PROCESS_ENTER
+  );
+
+  button = new wxButton(
+    popupWindow,
+    SETDIRBUTTON,
+    "Set New Directory",
+    wxDefaultPosition,
+    wxDefaultSize,
+    wxBORDER_NONE
+  );
+
+  wxBoxSizer* popupWindowSizer = new wxBoxSizer(wxVERTICAL);
+  popupWindowSizer->Add(input, 0, wxEXPAND);
+  popupWindowSizer->Add(button, 0, wxEXPAND);
+  popupWindow->SetSizerAndFit(popupWindowSizer);
+
+  popupWindow->Show(true);
+  popupWindow->Centre();
+
+  input->SetFocus();
+}
+
+void Frame::setDirectory(wxCommandEvent& evt)
+{
+  playlistDirectory = input->GetLineText(0);
+  // Adding a slash to playlistDirectory if it doesn't have one at the end
+  #ifdef linux
+    if (playlistDirectory[playlistDirectory.length() - 1] != '/')
+      playlistDirectory += '/';
+  #endif
+  #ifdef _WIN32
+    if (playlistDirectory[playlistDirectory.length() - 1] != '\\')
+      playlistDirectory += '\\';
+  #endif
+
+  // Checking if the directory is valid
+  wxDir* dirTest = new wxDir(playlistDirectory);
+  if (dirTest->IsOpened())
+  {
+    sizer->Clear(false);
+
+    delete playlist; playlist = nullptr;
+
+    playlist = new SongList(this, playlistDirectory);
+
+    sizer->Add(playlist, 1, wxEXPAND);
+    sizer->Add(controls, 0, wxEXPAND);
+    sizer->Layout();
+
+    if (popupWindow != nullptr)
+    {
+      popupWindow->Close();
+      delete popupWindow; popupWindow = nullptr;
+    }
+  }
+
+  delete dirTest; dirTest = nullptr;
 }

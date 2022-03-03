@@ -3,11 +3,24 @@
 Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1000, 90))
 {
   setMusicControls();
+  setSongInformation();
+
+  volume = new wxSlider(
+    this,
+    wxID_ANY,
+    10,
+    0,
+    100,
+    wxDefaultPosition,
+    wxSize(200, 90)
+  );
 
   divider = new wxBoxSizer(wxHORIZONTAL);
+  divider->Add(songInformation, 0);
   divider->AddStretchSpacer();
   divider->Add(musicControls, 0);
   divider->AddStretchSpacer();
+  divider->Add(volume, 0);
 
   SetSizer(divider);
 }
@@ -87,4 +100,44 @@ void Controls::setMusicControls()
     musicControls->Add(slider, 0, wxALL, 5);
   #endif
   musicControls->Add(buttons, 0, wxALIGN_CENTRE);
+}
+
+void Controls::setSongInformation()
+{
+  // Setting up songCover
+  wxImage::AddHandler(new wxPNGHandler);
+
+  wxBitmap image;
+  #ifdef linux
+    image.LoadFile("../img/musicNote.png", wxBITMAP_TYPE_PNG);
+  #endif
+  #ifdef _WIN32
+    image.LoadFile("..\\img\\musicNote.png", wxBITMAP_TYPE_PNG);
+  #endif
+
+  if (!image.IsOk())
+  {
+    std::cout << "!image.IsOk()" << std::endl;
+    exit(1);
+  }
+
+  songCover = new wxStaticBitmap(
+    this,
+    wxID_ANY,
+    image
+  );
+
+  // Setting up fileDetails
+  fileDetails = new wxStaticText(
+    this,
+    wxID_ANY,
+    "Song Name\nSong Extension",
+    wxDefaultPosition,
+    wxSize(110, 40)
+  );
+
+  // Setting up songInformation
+  songInformation = new wxBoxSizer(wxHORIZONTAL);
+  songInformation->Add(songCover, 0, wxLEFT | wxTOP | wxRIGHT, 5);
+  songInformation->Add(fileDetails, 0, wxALIGN_CENTER_VERTICAL);
 }

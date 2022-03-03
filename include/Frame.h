@@ -5,6 +5,12 @@
 #include "SongList.h"
 #include "Controls.h"
 
+enum
+{
+  SETDIRINPUT,
+  SETDIRBUTTON
+};
+
 class Frame : public wxFrame
 {
  public:
@@ -14,6 +20,8 @@ class Frame : public wxFrame
   // Menubar functions
   void exit(wxCommandEvent&);
   void showControls(wxCommandEvent&);
+  void showSetDirectory(wxCommandEvent&);
+  void setDirectory(wxCommandEvent& evt);
 
   // Playlist events
   void setControls(wxCommandEvent&);
@@ -27,4 +35,11 @@ class Frame : public wxFrame
   wxBoxSizer* sizer;
     SongList* playlist;
     Controls* controls;
+
+  // Popup window used for set directory and yt to mp3 popup windows
+  wxFrame* popupWindow;
+  wxTextCtrl* input;
+  wxButton* button;
+
+  wxString playlistDirectory;
 };

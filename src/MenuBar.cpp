@@ -2,6 +2,12 @@
 
 MenuBar::MenuBar() : wxMenuBar()
 {
+  setDirectory = new wxMenuItem(
+    nullptr,
+    SETDIR,
+    "Set Directory\tCtrl+W"
+  );
+
   fileExit = new wxMenuItem(
     nullptr,
     wxID_EXIT,
@@ -9,6 +15,7 @@ MenuBar::MenuBar() : wxMenuBar()
   );
 
   file = new wxMenu();
+  file->Append(setDirectory);
   file->Append(fileExit);
 
   viewShowControls = new wxMenuItem(

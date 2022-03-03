@@ -2,7 +2,11 @@
 
 #include <wx/wx.h>
 
-enum { SHOWCONTROLS };
+enum
+{
+  SHOWCONTROLS,
+  SETDIR
+};
 
 class MenuBar : public wxMenuBar
 {
@@ -11,6 +15,7 @@ class MenuBar : public wxMenuBar
 
  private:
   wxMenu* file;
+    wxMenuItem* setDirectory;
     wxMenuItem* fileExit;
   wxMenu* view;
     wxMenuItem* viewShowControls;

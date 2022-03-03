@@ -9,10 +9,16 @@ class Controls : public wxPanel
 
   // Setup functions
   void setMusicControls();
+  void setSongInformation();
 
  private:
   // Holds: song info, music controls, volume
   wxBoxSizer* divider;
+    // Holds: Album cover (not rn), song name, and song extension
+    wxBoxSizer* songInformation;
+      wxStaticBitmap* songCover;
+      wxStaticText* fileDetails;
+
     // Holds: Music guage/slider, buttons (play/pause, next, previous, and shuffle)
     wxBoxSizer* musicControls;
       wxSlider* slider;
@@ -21,4 +27,6 @@ class Controls : public wxPanel
         wxButton* previous;
         wxButton* play;
         wxButton* next;
+
+    wxSlider* volume;
 };
