@@ -1,5 +1,9 @@
 #include "Controls.h"
 
+BEGIN_EVENT_TABLE(Controls, wxPanel)
+  EVT_MEDIA_LOADED(MEDIA, Controls::playSong)
+END_EVENT_TABLE()
+
 Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1000, 90))
 {
   setMusicControls();
@@ -149,3 +153,58 @@ void Controls::setSongInformation()
   songInformation->Add(songCover, 0, wxLEFT | wxTOP | wxRIGHT, 5);
   songInformation->Add(fileDetails, 0, wxALIGN_CENTER_VERTICAL);
 }
+
+void Controls::setMediaPlayer(wxString songDirectory)
+{
+  if (mediaPlayer == nullptr)
+  {
+    #ifdef linux
+      mediaPlayer = new wxMediaCtrl(this, MEDIA);
+    #endif
+    #ifdef _WIN32
+      mediaPlayer = new wxMediaCtrl(
+        this,
+        MEDIA,
+        wxEmptyString,
+        wxDefaultPosition,
+        wxDefaultSize,
+        0,
+        wxMEDIABACKEND_WMP10
+      );
+    #endif
+
+    mediaPlayer->SetVolume(1.0);
+  }
+
+  if (!mediaPlayer->Load(songDirectory))
+  {
+    std::cout << "!mediaPlayer->Load(songDirectory)\n";
+    exit(1);
+  }
+}
+
+void Controls::playSong(wxMediaEvent& evt)
+{
+  wxString song = playlist->GetString(playlist->GetSelection());
+  wxString songExtension;
+
+  // Getting the song's file extension and name (without file extension)
+  for (int i = (song.length() - 1); i >= 0; i--)
+  {
+    if (song[i] == '.')
+    {
+      songExtension = song.substr(i + 1);
+      song = song.substr(0, i);
+      break;
+    }
+  }
+
+  // Updating songInformation sizer
+  if (song.length() > 20)
+    song = song.substr(0, 20);
+  fileDetails->SetLabel(song + "\n" + songExtension);
+
+  mediaPlayer->Play();
+}
+
+void Controls::setPlaylist(SongList* playlistArg) { playlist = playlistArg; }

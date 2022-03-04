@@ -22,6 +22,7 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wx
   playlist = new SongList(this);
 
   controls = new Controls(this);
+  controls->setPlaylist(playlist);
   controls->Show(false);
 
   sizer = new wxBoxSizer(wxVERTICAL);
@@ -47,7 +48,15 @@ void Frame::showControls(wxCommandEvent& evt)
 
 void Frame::setControls(wxCommandEvent& evt)
 {
-  std::cout << evt.GetString() << std::endl;
+  if (!controls->IsShown())
+  {
+    controls->Show(true);
+    sizer->Layout();
+  }
+
+  wxString songDirectory = playlistDirectory + evt.GetString();
+
+  controls->setMediaPlayer(songDirectory);
 }
 
 void Frame::showSetDirectory(wxCommandEvent& evt)
@@ -123,6 +132,8 @@ void Frame::setDirectory(wxCommandEvent& evt)
       popupWindow->Close();
       delete popupWindow; popupWindow = nullptr;
     }
+
+    controls->setPlaylist(playlist);
   }
 
   delete dirTest; dirTest = nullptr;
