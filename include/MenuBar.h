@@ -5,7 +5,9 @@
 enum
 {
   SHOWCONTROLS,
-  SETDIR
+  SETDIR,
+  YT2MP3,
+  REFRESH
 };
 
 class MenuBar : public wxMenuBar
@@ -16,7 +18,9 @@ class MenuBar : public wxMenuBar
  private:
   wxMenu* file;
     wxMenuItem* setDirectory;
+    wxMenuItem* setYt2Mp3;
     wxMenuItem* fileExit;
   wxMenu* view;
+    wxMenuItem* refreshDirectory;
     wxMenuItem* viewShowControls;
 };

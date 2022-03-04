@@ -8,7 +8,10 @@
 enum
 {
   SETDIRINPUT,
-  SETDIRBUTTON
+  SETDIRBUTTON,
+  QUEUE,
+  YT2MP3INPUT,
+  YT2MP3BUTTON
 };
 
 class Frame : public wxFrame
@@ -22,6 +25,13 @@ class Frame : public wxFrame
   void showControls(wxCommandEvent&);
   void showSetDirectory(wxCommandEvent&);
   void setDirectory(wxCommandEvent& evt);
+  void showYt2Mp3(wxCommandEvent&);
+  void Yt2Mp3(wxCommandEvent&);
+  void refreshPlaylist(wxCommandEvent&);
+
+  // Popup menu
+  void playlistMenu(wxMouseEvent&);
+  void queueSong(wxCommandEvent&);
 
   // Playlist events
   void setControls(wxCommandEvent&);

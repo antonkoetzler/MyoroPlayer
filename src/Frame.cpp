@@ -4,7 +4,11 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   // Menubar events
   EVT_MENU(wxID_EXIT, Frame::exit)
   EVT_MENU(SHOWCONTROLS, Frame::showControls)
+  EVT_MENU(YT2MP3, Frame::showYt2Mp3)
   EVT_MENU(SETDIR, Frame::showSetDirectory)
+  EVT_MENU(REFRESH, Frame::refreshPlaylist)
+  // Popup menu
+  EVT_MENU(QUEUE, Frame::queueSong)
 
   // Playlist events
   EVT_LISTBOX_DCLICK(SONGLIST, Frame::setControls)
@@ -12,6 +16,8 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   // popupWindow events
   EVT_TEXT_ENTER(SETDIRINPUT, Frame::setDirectory)
   EVT_BUTTON(SETDIRBUTTON, Frame::setDirectory)
+  EVT_TEXT_ENTER(YT2MP3INPUT, Frame::Yt2Mp3)
+  EVT_BUTTON(YT2MP3BUTTON, Frame::Yt2Mp3)
 END_EVENT_TABLE()
 
 Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wxSize(1000, 800))
@@ -32,6 +38,9 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wx
   SetSizer(sizer);
 
   Centre();
+
+  // Connect right click to bringing up popup menu
+  playlist->Connect(wxEVT_RIGHT_UP, wxMouseEventHandler(Frame::playlistMenu), nullptr, this);
 }
 
 Frame::~Frame() { Destroy(); }
@@ -140,4 +149,98 @@ void Frame::setDirectory(wxCommandEvent& evt)
   }
 
   delete dirTest; dirTest = nullptr;
+}
+
+void Frame::showYt2Mp3(wxCommandEvent& evt)
+{
+  popupWindow = new wxFrame(
+    this,
+    wxID_ANY,
+    "Convert YouTube Link To MP3"
+  );
+
+  input = new wxTextCtrl(
+    popupWindow,
+    YT2MP3INPUT,
+    wxEmptyString,
+    wxDefaultPosition,
+    wxSize(250, 23),
+    wxTE_CENTRE | wxTE_PROCESS_ENTER
+  );
+
+  button = new wxButton(
+    popupWindow,
+    YT2MP3BUTTON,
+    "Convert To MP3!",
+    wxDefaultPosition,
+    wxDefaultSize,
+    wxBORDER_NONE
+  );
+
+  wxBoxSizer* popupWindowSizer = new wxBoxSizer(wxVERTICAL);
+  popupWindowSizer->Add(input, 0, wxEXPAND);
+  popupWindowSizer->Add(button, 0, wxEXPAND);
+  popupWindow->SetSizerAndFit(popupWindowSizer);
+
+  popupWindow->Show(true);
+  popupWindow->Centre();
+
+  input->SetFocus();
+}
+
+void Frame::Yt2Mp3(wxCommandEvent& evt)
+{
+  // Making the youtube-dl command
+  wxString command = "youtube-dl --extract-audio --audio-format mp3 -o \"" + playlistDirectory + "%(title)s-%(id)s.mp3\" " + input->GetLineText(0);
+  wxExecute(command);
+
+  wxMessageDialog* message = new wxMessageDialog(
+    nullptr,
+    "Make sure to refresh your playlist directory\nafter the download has completed",
+    wxEmptyString,
+    wxOK | wxCENTRE
+  );
+  message->ShowModal();
+
+  popupWindow->Close();
+  delete popupWindow; popupWindow = nullptr;
+}
+
+void Frame::playlistMenu(wxMouseEvent& evt)
+{
+  wxClientDC dc(this);
+  playlist->SetSelection(playlist->HitTest(evt.GetLogicalPosition(dc)));
+
+  wxMenuItem* popupQueue = new wxMenuItem(
+    nullptr,
+    QUEUE,
+    "Queue Song"
+  );
+
+  wxMenu* popup = new wxMenu();
+  popup->Append(popupQueue);
+
+  PopupMenu(popup, wxDefaultPosition);
+}
+
+void Frame::queueSong(wxCommandEvent& evt)
+{
+  wxString song = playlist->GetString(playlist->GetSelection());
+  wxString songDirectory = playlistDirectory + song;
+  controls->addToQueue(songDirectory);
+}
+
+void Frame::refreshPlaylist(wxCommandEvent& evt)
+{
+  bool showControls = controls->IsShown();
+
+  sizer->Clear(false);
+
+  delete playlist; playlist = nullptr;
+  playlist = new SongList(this, playlistDirectory);
+
+  sizer->Add(playlist, 1, wxEXPAND);
+  sizer->Add(controls, 0, wxEXPAND);
+
+  sizer->Layout();
 }

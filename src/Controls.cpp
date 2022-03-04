@@ -216,7 +216,7 @@ void Controls::playSong(wxMediaEvent& evt)
   fileDetails->SetLabel(song + "\n" + songExtension);
 
   // Setting up the timer to keep track of slider
-  updateslider = new UpdateSlider(slider, mediaPlayer, playlist);
+  updateslider = new UpdateSlider(slider, mediaPlayer, playlist, shuffleToggle, songCache, queue, playlistDirectory);
 
   mediaPlayer->Play();
 }
@@ -331,7 +331,32 @@ void Controls::nextSong(wxCommandEvent& evt)
 
   int nextSongIndex = 0;
 
-  if (shuffleToggle == 0)
+  if (!queue.empty())
+  {
+    wxString song = queue[queue.size() - 1];
+    queue.pop_back();
+
+    for (int i = (song.length() - 1); i >= 0; i--)
+    {
+      #ifdef linux
+        if (song[i] == '/')
+        {
+          song = song.substr(i + 1);
+          break;
+        }
+      #endif
+      #ifdef _WIN32
+        if (song[i] == '\\')
+        {
+          song = song.substr(i + 1);
+          break;
+        }
+      #endif
+    }
+
+    nextSongIndex = playlist->FindString(song);
+  }
+  else if (shuffleToggle == 0)
   {
     // Need to get the song's position in playlist to determine what plays next
 
@@ -381,3 +406,9 @@ void Controls::nextSong(wxCommandEvent& evt)
 }
 
 void Controls::setPlaylistDirectory(wxString playlistDirectoryArg) { playlistDirectory = playlistDirectoryArg; }
+
+void Controls::addToQueue(wxString song)
+{
+  queue.push_back(song);
+  if (updateslider != nullptr) updateslider->setQueue(queue);
+}

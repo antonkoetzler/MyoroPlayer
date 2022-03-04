@@ -37,6 +37,7 @@ class Controls : public wxPanel
   void setPlaylist(SongList*);
   void addToSongCache(wxString);
   void setPlaylistDirectory(wxString);
+  void addToQueue(wxString);
 
   // musicControl button functions
   void previousSong(wxCommandEvent&);
@@ -70,6 +71,7 @@ class Controls : public wxPanel
   SongList* playlist;
   UpdateSlider* updateslider = nullptr;
   wxVector<wxString> songCache;
+  wxVector<wxString> queue;
 
   #ifdef linux
     wxString playlistDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/";
