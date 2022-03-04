@@ -2,11 +2,19 @@
 
 #include <wx/wx.h>
 #include <wx/mediactrl.h>
+#include <stdlib.h>
 #include "SongList.h"
+#include "UpdateSlider.h"
 
 enum
 {
-  MEDIA
+  MEDIA,
+  SLIDER,
+  VOLUME,
+  SHUFFLE,
+  PREVIOUS,
+  PLAY,
+  NEXT
 };
 
 class Controls : public wxPanel
@@ -22,8 +30,19 @@ class Controls : public wxPanel
   // mediaPlayer functions
   void playSong(wxMediaEvent&);
 
+  // wxSlider event
+  void changeSliderPosition(wxScrollEvent&);
+
   // Setters
   void setPlaylist(SongList*);
+  void addToSongCache(wxString);
+  void setPlaylistDirectory(wxString);
+
+  // musicControl button functions
+  void previousSong(wxCommandEvent&);
+  void toggleShuffle(wxCommandEvent&);
+  void togglePause(wxCommandEvent&);
+  void nextSong(wxCommandEvent&);
 
  private:
   DECLARE_EVENT_TABLE();
@@ -40,6 +59,7 @@ class Controls : public wxPanel
       wxSlider* slider;
       wxBoxSizer* buttons;
         wxButton* shuffle;
+          int shuffleToggle = 0;
         wxButton* previous;
         wxButton* play;
         wxButton* next;
@@ -48,4 +68,13 @@ class Controls : public wxPanel
 
   wxMediaCtrl* mediaPlayer = nullptr;
   SongList* playlist;
+  UpdateSlider* updateslider = nullptr;
+  wxVector<wxString> songCache;
+
+  #ifdef linux
+    wxString playlistDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/";
+  #endif
+  #ifdef _WIN32
+    wxString playlistDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\";
+  #endif
 };

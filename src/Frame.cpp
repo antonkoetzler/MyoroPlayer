@@ -56,6 +56,8 @@ void Frame::setControls(wxCommandEvent& evt)
 
   wxString songDirectory = playlistDirectory + evt.GetString();
 
+  controls->addToSongCache(songDirectory);
+
   controls->setMediaPlayer(songDirectory);
 }
 
@@ -134,6 +136,7 @@ void Frame::setDirectory(wxCommandEvent& evt)
     }
 
     controls->setPlaylist(playlist);
+    controls->setPlaylistDirectory(playlistDirectory);
   }
 
   delete dirTest; dirTest = nullptr;

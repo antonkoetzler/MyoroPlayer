@@ -1,7 +1,17 @@
 #include "Controls.h"
 
 BEGIN_EVENT_TABLE(Controls, wxPanel)
+  // Catching event after mediaPlayer->Load(...)
   EVT_MEDIA_LOADED(MEDIA, Controls::playSong)
+
+  // Slider(s') event
+  EVT_SCROLL_THUMBRELEASE(Controls::changeSliderPosition)
+
+  // Music controls (play/pause, shuffle, next, previous)
+  EVT_BUTTON(SHUFFLE, Controls::toggleShuffle)
+  EVT_BUTTON(PREVIOUS, Controls::previousSong)
+  EVT_BUTTON(PLAY, Controls::togglePause)
+  EVT_BUTTON(NEXT, Controls::nextSong)
 END_EVENT_TABLE()
 
 Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1000, 90))
@@ -11,8 +21,8 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
 
   volume = new wxSlider(
     this,
-    wxID_ANY,
-    10,
+    VOLUME,
+    100,
     0,
     100,
     wxDefaultPosition,
@@ -35,7 +45,7 @@ void Controls::setMusicControls()
   #ifdef linux
     slider = new wxSlider(
       this,
-      wxID_ANY,
+      SLIDER,
       10,
       0,
       100,
@@ -46,7 +56,7 @@ void Controls::setMusicControls()
   #ifdef _WIN32
     slider = new wxSlider(
       this,
-      wxID_ANY,
+      SLIDER,
       10,
       0,
       100,
@@ -58,7 +68,7 @@ void Controls::setMusicControls()
   // Buttons
   shuffle = new wxButton(
     this,
-    wxID_ANY,
+    SHUFFLE,
     "%",
     wxDefaultPosition,
     wxSize(40, 40),
@@ -66,7 +76,7 @@ void Controls::setMusicControls()
   );
   previous = new wxButton(
     this,
-    wxID_ANY,
+    PREVIOUS,
     "<<",
     wxDefaultPosition,
     wxSize(40, 40),
@@ -74,7 +84,7 @@ void Controls::setMusicControls()
   );
   play = new wxButton(
     this,
-    wxID_ANY,
+    PLAY,
     ">",
     wxDefaultPosition,
     wxSize(40, 40),
@@ -82,7 +92,7 @@ void Controls::setMusicControls()
   );
   next = new wxButton(
     this,
-    wxID_ANY,
+    NEXT,
     ">>",
     wxDefaultPosition,
     wxSize(40, 40),
@@ -184,6 +194,8 @@ void Controls::setMediaPlayer(wxString songDirectory)
 
 void Controls::playSong(wxMediaEvent& evt)
 {
+  if (updateslider != nullptr) { delete updateslider; updateslider = nullptr; }
+
   wxString song = playlist->GetString(playlist->GetSelection());
   wxString songExtension;
 
@@ -203,7 +215,169 @@ void Controls::playSong(wxMediaEvent& evt)
     song = song.substr(0, 20);
   fileDetails->SetLabel(song + "\n" + songExtension);
 
+  // Setting up the timer to keep track of slider
+  updateslider = new UpdateSlider(slider, mediaPlayer, playlist);
+
   mediaPlayer->Play();
 }
 
 void Controls::setPlaylist(SongList* playlistArg) { playlist = playlistArg; }
+
+void Controls::addToSongCache(wxString songDirectory) { songCache.push_back(songDirectory); }
+
+void Controls::changeSliderPosition(wxScrollEvent& evt)
+{
+  switch (evt.GetId())
+  {
+    case SLIDER:
+      slider->SetValue(evt.GetPosition());
+      mediaPlayer->Seek(evt.GetPosition() * 1000);
+      break;
+    case VOLUME:
+      volume->SetValue(evt.GetPosition());
+      double volume = (double)evt.GetPosition() / 100;
+      mediaPlayer->SetVolume(volume);
+      break;
+  }
+}
+
+void Controls::toggleShuffle(wxCommandEvent& evt)
+{
+  if (shuffleToggle == 0) shuffleToggle = 1;
+  else shuffleToggle = 0;
+}
+
+void Controls::previousSong(wxCommandEvent& evt)
+{
+  int songCacheSize = songCache.size();
+  bool cont = false;
+
+  if (songCacheSize >= 2)
+  {
+    songCache.pop_back();
+    cont = true;
+  }
+
+  if (cont)
+  {
+    // Need the song's file name
+    wxString song = songCache[songCache.size() - 1];
+    // Removing directory from var song
+    for (int i = (song.length() - 1); i >= 0; i--)
+    {
+      #ifdef linux
+        if (song[i] == '/')
+        {
+          song = song.substr(i + 1);
+          break;
+        }
+      #endif
+      #ifdef _WIN32
+        if (song[i] == '\\')
+        {
+          song = song.substr(i + 1);
+          break;
+        }
+      #endif
+    }
+
+    // Changing selection
+    playlist->SetSelection(playlist->FindString(song));
+
+    if (!mediaPlayer->Load(songCache[songCache.size() - 1]))
+    {
+      std::cout << "!mediaPlayer->Load(songCache[songCache.size() - 1])" << std::endl;
+      exit(1);
+    }
+
+    // Removing the now previous song that is playing
+    songCache.pop_back();
+  }
+}
+
+void Controls::togglePause(wxCommandEvent& evt)
+{
+  wxMediaState state = mediaPlayer->GetState();
+
+  switch (state)
+  {
+    case wxMEDIASTATE_PLAYING:
+      mediaPlayer->Pause();
+      break;
+    case wxMEDIASTATE_PAUSED:
+      mediaPlayer->Play();
+      break;
+  }
+}
+
+void Controls::nextSong(wxCommandEvent& evt)
+{
+  if (mediaPlayer != nullptr) { delete mediaPlayer; mediaPlayer = nullptr; }
+
+  #ifdef linux
+    mediaPlayer = new wxMediaCtrl(this, MEDIA);
+  #endif
+  #ifdef _WIN32
+    mediaPlayer = new wxMediaCtrl(
+      this,
+      MEDIA,
+      wxEmptyString,
+      wxDefaultPosition,
+      wxDefaultSize,
+      0,
+      wxMEDIABACKEND_WMP10 
+    );
+  #endif 
+
+  int nextSongIndex = 0;
+
+  if (shuffleToggle == 0)
+  {
+    // Need to get the song's position in playlist to determine what plays next
+
+    // Getting the current song
+    wxString currentSong = songCache[songCache.size() - 1];
+    // Removing the directory of the song
+    for (int i = (currentSong.length() - 1); i >= 0; i--)
+    {
+      #ifdef linux
+        if (currentSong[i] == '/')
+        {
+          currentSong = currentSong.substr(i + 1);
+          break;
+        }
+      #endif
+      #ifdef _WIN32
+        if (currentSong[i] == '\\')
+        {
+          currentSong = currentSong.substr(i + 1);
+          break;
+        }
+      #endif
+    }
+
+    nextSongIndex = playlist->FindString(currentSong);
+    if (nextSongIndex == (playlist->GetCount() - 1))
+      nextSongIndex = 0;
+    else
+      nextSongIndex += 1;
+  }
+  else
+    nextSongIndex = rand() % playlist->GetCount();
+
+  playlist->SetSelection(nextSongIndex); // Highlighting song on the playlist list
+
+  // Getting the next song's file name + directory
+  wxString songDirectory = playlist->GetString(nextSongIndex);
+  songDirectory = playlistDirectory + songDirectory;
+
+  songCache.push_back(songDirectory);
+
+  if (!mediaPlayer->Load(songDirectory))
+  {
+    std::cout << "!mediaPlayer->Load(songDirectory)" << std::endl;
+    exit(1);
+  }
+}
+
+void Controls::setPlaylistDirectory(wxString playlistDirectoryArg) { playlistDirectory = playlistDirectoryArg; }
