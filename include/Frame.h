@@ -42,9 +42,9 @@ class Frame : public wxFrame
   wxButton* button;
 
   #ifdef linux
-    wxString playlistDirectory = "../songs/";
+    wxString playlistDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs/";
   #endif
   #ifdef _WIN32
-    wxString playlistDirectory = "..\\songs\\";
+    wxString playlistDirectory = wxGetCwd().substr(0, wxGetCwd().length() - 5) + "songs\\";
   #endif
 };

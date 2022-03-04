@@ -156,25 +156,24 @@ void Controls::setSongInformation()
 
 void Controls::setMediaPlayer(wxString songDirectory)
 {
-  if (mediaPlayer == nullptr)
-  {
-    #ifdef linux
-      mediaPlayer = new wxMediaCtrl(this, MEDIA);
-    #endif
-    #ifdef _WIN32
-      mediaPlayer = new wxMediaCtrl(
-        this,
-        MEDIA,
-        wxEmptyString,
-        wxDefaultPosition,
-        wxDefaultSize,
-        0,
-        wxMEDIABACKEND_WMP10
-      );
-    #endif
+  if (mediaPlayer != nullptr) { delete mediaPlayer; mediaPlayer = nullptr; }
 
-    mediaPlayer->SetVolume(1.0);
-  }
+  #ifdef linux
+    mediaPlayer = new wxMediaCtrl(this, MEDIA);
+  #endif
+  #ifdef _WIN32
+    mediaPlayer = new wxMediaCtrl(
+      this,
+      MEDIA,
+      wxEmptyString,
+      wxDefaultPosition,
+      wxDefaultSize,
+      0,
+      wxMEDIABACKEND_WMP10 
+    );
+  #endif
+
+  mediaPlayer->SetVolume(1.0);
 
   if (!mediaPlayer->Load(songDirectory))
   {
