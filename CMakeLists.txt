@@ -15,7 +15,9 @@ INCLUDE_DIRECTORIES(./include/)
 
 INCLUDE("${wxWidgets_USE_FILE}")
 
+#add_link_options(-mwindows)
+
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRC})
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${wxWidgets_LIBRARIES} "-static -mwindows")
 
