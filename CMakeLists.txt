@@ -2,7 +2,6 @@ PROJECT(MyoroPlayer)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
-# Setting wxWidgets directory on Windows
 IF (WIN32)
   SET(wxWidgets_ROOT_DIR "C:/wxWidgets-3.1.5")
   SET(wxWidgets_CONFIGURATION mswu)
@@ -14,8 +13,6 @@ AUX_SOURCE_DIRECTORY(./src/ SRC)
 INCLUDE_DIRECTORIES(./include/)
 
 INCLUDE("${wxWidgets_USE_FILE}")
-
-#add_link_options(-mwindows)
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRC})
 
