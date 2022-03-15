@@ -16,11 +16,33 @@ INCLUDE("${wxWidgets_USE_FILE}")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRC})
 
-IF (WIN32)
-  TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${wxWidgets_LIBRARIES} "-static -mwindows")
-ENDIF (WIN32)
-
 IF (UNIX)
   TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
 ENDIF (UNIX)
+
+IF (WIN32)
+  SET(wxLibsDir "C:/wxWidgets-3.1.5/lib/gcc_lib")
+  TARGET_LINK_LIBRARIES(
+    ${PROJECT_NAME}
+    ${wxLibsDir}/libwxmsw31u_media.a
+    ${wxLibsDir}/libwxmsw31u_core.a
+    ${wxLibsDir}/libwxbase31u.a
+    ${wxLibsDir}/libwxpng.a
+    ${wxLibsDir}/libwxtiff.a
+    ${wxLibsDir}/libwxjpeg.a
+    ${wxLibsDir}/libwxzlib.a
+    ${wxLibsDir}/libwxregexu.a
+    ${wxLibsDir}/libwxexpat.a
+    winmm
+    comctl32
+    uuid
+    oleacc
+    uxtheme
+    rpcrt4
+    shlwapi
+    version
+    wsock32
+    "-static -mwindows"
+  )
+ENDIF (WIN32)
 

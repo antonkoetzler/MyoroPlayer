@@ -15,6 +15,9 @@ class Frame : public wxFrame
   void exit(wxCommandEvent&);
   void toggleControls(wxCommandEvent&);
 
+  // Listbox event functions
+  void initSong(wxCommandEvent&);
+
  private:
   DECLARE_EVENT_TABLE();
 

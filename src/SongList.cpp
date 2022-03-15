@@ -1,3 +1,4 @@
+  // ShowWindow(hWnd, SW_HIDE);
 #include "SongList.h"
 
 SongList::SongList(wxFrame* parent) : wxListBox(parent, SONGLIST)
@@ -11,7 +12,7 @@ SongList::SongList(wxFrame* parent) : wxListBox(parent, SONGLIST)
   #endif
 
   directory = new wxDir(playlistDirectory);
-  if (!directory->IsOpened()) { Close(); }
+  if (!directory->IsOpened()) { exit(0); }
 
   wxString fileName;
   bool cont = directory->GetFirst(&fileName, wxEmptyString, wxDIR_FILES);
