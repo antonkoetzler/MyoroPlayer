@@ -12,7 +12,7 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
     wxID_ANY,
     "\nSong Name\nSong Extension",
     wxDefaultPosition,
-    wxSize(190, 90),
+    wxSize(190, 75),
     wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE | wxST_ELLIPSIZE_END
   );
   songInformation->SetFont(wxFont(
@@ -35,7 +35,7 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
   );
 
   sizer = new wxBoxSizer(wxHORIZONTAL);
-  sizer->Add(songInformation, 0, wxLEFT | wxALIGN_BOTTOM, 10);
+  sizer->Add(songInformation, 0, wxLEFT | wxALIGN_CENTRE, 10);
   sizer->AddStretchSpacer();
   sizer->Add(mainControls, 0);
   sizer->AddStretchSpacer();
@@ -45,15 +45,28 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
 
 void Controls::setMainControls()
 {
-  slider = new wxSlider(
-    this,
-    wxID_ANY,
-    1,
-    0,
-    100,
-    wxDefaultPosition,
-    wxSize(200, 30)
-  );
+  #ifdef linux
+    slider = new wxSlider(
+      this,
+      wxID_ANY,
+      1,
+      0,
+      100,
+      wxDefaultPosition,
+      wxSize(200, 40)
+    );
+  #endif
+  #ifdef _WIN32
+    slider = new wxSlider(
+      this,
+      wxID_ANY,
+      1,
+      0,
+      100,
+      wxDefaultPosition,
+      wxSize(200, 30)
+    );
+  #endif
 
   shuffle = new wxButton(
     this,
