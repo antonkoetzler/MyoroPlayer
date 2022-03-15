@@ -7,14 +7,26 @@ END_EVENT_TABLE()
 
 Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1000, 90))
 {
-  songInformation = new wxStaticText(
-    this,
-    wxID_ANY,
-    "\nSong Name\nSong Extension",
-    wxDefaultPosition,
-    wxSize(190, 75),
-    wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE | wxST_ELLIPSIZE_END
-  );
+  #ifdef linux
+    songInformation = new wxStaticText(
+      this,
+      wxID_ANY,
+      "\nSong Name\nSong Extension",
+      wxDefaultPosition,
+      wxSize(190, 75),
+      wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE | wxST_ELLIPSIZE_END
+    );
+  #endif
+  #ifdef _WIN32
+    songInformation = new wxStaticText(
+      this,
+      wxID_ANY,
+      "\nSong Name\nSongExtension",
+      wxDefaultPosition,
+      wxSize(190, 90),
+      wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE | wxST_ELLIPSIZE_END
+    );
+  #endif
   songInformation->SetFont(wxFont(
     14,
     wxFONTFAMILY_DEFAULT,
