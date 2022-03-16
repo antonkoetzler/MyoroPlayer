@@ -3,6 +3,10 @@
 BEGIN_EVENT_TABLE(Controls, wxPanel)
   // Catching mediaPlayer->Load(...)
   EVT_MEDIA_LOADED(MEDIA, Controls::playSong)
+
+  // Button (shuffle, prev, play/pause, next)  events
+  EVT_BUTTON(SHUFFLE, Controls::toggleShuffle)
+  EVT_BUTTON(PLAY, Controls::togglePlay)
 END_EVENT_TABLE()
 
 Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1000, 90))
@@ -82,7 +86,7 @@ void Controls::setMainControls()
 
   shuffle = new wxButton(
     this,
-    wxID_ANY,
+    SHUFFLE,
     "%",
     wxDefaultPosition,
     wxSize(40, 40),
@@ -90,7 +94,7 @@ void Controls::setMainControls()
   );
   previous = new wxButton(
     this,
-    wxID_ANY,
+    PREV,
     "<<",
     wxDefaultPosition,
     wxSize(40, 40),
@@ -98,7 +102,7 @@ void Controls::setMainControls()
   );
   play = new wxButton(
     this,
-    wxID_ANY,
+    PLAY,
     ">",
     wxDefaultPosition,
     wxSize(40, 40),
@@ -106,7 +110,7 @@ void Controls::setMainControls()
   );
   next = new wxButton(
     this,
-    wxID_ANY,
+    NEXT,
     ">>",
     wxDefaultPosition,
     wxSize(40, 40),
@@ -152,6 +156,8 @@ void Controls::initMediaPlayer(wxString songDirectory)
 
 void Controls::playSong(wxMediaEvent& evt)
 {
+  if (updateSlider != nullptr) { delete updateSlider; updateSlider = nullptr; }
+
   // Getting song name and extension to display
   wxString song = playlist->GetString(playlist->GetSelection());
   wxString songExtension;
@@ -170,8 +176,25 @@ void Controls::playSong(wxMediaEvent& evt)
   // Updating songInformation
   songInformation->SetLabel("\n" + song + "\n" + songExtension);
 
+  // Initialize updateSlider
+  updateSlider = new UpdateSlider(slider, mediaPlayer);
+
   mediaPlayer->Play();
 }
 
 void Controls::setPlaylist(SongList* playlistArg) { playlist = playlistArg; }
+
+void Controls::toggleShuffle(wxCommandEvent& evt)
+{
+  if (shuffleOn == 0) shuffleOn = 1;
+  else shuffleOn = 0;
+}
+
+void Controls::togglePlay(wxCommandEvent& evt)
+{
+  wxMediaState state = mediaPlayer->GetState();
+
+  if (state == wxMEDIASTATE_PAUSED) mediaPlayer->Play();
+  else if (state == wxMEDIASTATE_PLAYING) mediaPlayer->Pause();
+}
 

@@ -3,8 +3,16 @@
 #include <wx/wx.h>
 #include <wx/mediactrl.h>
 #include "SongList.h"
+#include "UpdateSlider.h"
 
-enum { MEDIA };
+enum
+{
+  MEDIA,
+  SHUFFLE,
+  PREV,
+  PLAY,
+  NEXT
+};
 
 class Controls : public wxPanel
 {
@@ -14,10 +22,13 @@ class Controls : public wxPanel
   void setMainControls();         // Sets up mainControls
 
   void initMediaPlayer(wxString);
-
   void playSong(wxMediaEvent&);
 
   void setPlaylist(SongList*);
+
+  // Button (shuffle, prev, play/pause, next) event functions
+  void toggleShuffle(wxCommandEvent&);
+  void togglePlay(wxCommandEvent&);
 
  private:
   DECLARE_EVENT_TABLE();
@@ -31,6 +42,7 @@ class Controls : public wxPanel
       wxSlider* slider;
       wxBoxSizer* mainControlsButtons;
         wxButton* shuffle;
+          int shuffleOn = 0;
         wxButton* previous;
         wxButton* play;
         wxButton* next;
@@ -39,5 +51,6 @@ class Controls : public wxPanel
 
   wxMediaCtrl* mediaPlayer = nullptr;
   SongList* playlist = nullptr;
+  UpdateSlider* updateSlider = nullptr;
 };
 
