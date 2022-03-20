@@ -2,6 +2,7 @@
 
 #include <wx/wx.h>
 #include <wx/mediactrl.h>
+#include <stdlib.h>       // rand()
 #include "SongList.h"
 #include "UpdateSlider.h"
 
@@ -28,7 +29,9 @@ class Controls : public wxPanel
 
   // Button (shuffle, prev, play/pause, next) event functions
   void toggleShuffle(wxCommandEvent&);
+  void previousSong(wxCommandEvent&);
   void togglePlay(wxCommandEvent&);
+  void nextSong(wxCommandEvent&);
 
  private:
   DECLARE_EVENT_TABLE();
@@ -52,5 +55,7 @@ class Controls : public wxPanel
   wxMediaCtrl* mediaPlayer = nullptr;
   SongList* playlist = nullptr;
   UpdateSlider* updateSlider = nullptr;
+
+  wxVector<wxString> songCache;
 };
 

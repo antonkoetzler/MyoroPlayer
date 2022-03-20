@@ -5,6 +5,12 @@
 #include "SongList.h"
 #include "Controls.h"
 
+enum
+{
+  CHANGE_DIR_INP,
+  CHANGE_DIR_BUTTON
+};
+
 class Frame : public wxFrame
 {
  public:
@@ -14,6 +20,8 @@ class Frame : public wxFrame
   // MenuBar event functions
   void exit(wxCommandEvent&);
   void toggleControls(wxCommandEvent&);
+  void changeDirectory(wxCommandEvent&);
+    void setDirectory(wxCommandEvent&);
 
   // Listbox event functions
   void initSong(wxCommandEvent&);
@@ -28,5 +36,9 @@ class Frame : public wxFrame
   wxBoxSizer* sizer;
   SongList* playlist;
   Controls* controls;
+
+  // For popup windows
+  wxFrame* popup = nullptr;
+  wxTextCtrl* inp = nullptr;
 };
 
