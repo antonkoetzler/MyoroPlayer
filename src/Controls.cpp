@@ -160,7 +160,11 @@ void Controls::initMediaPlayer(wxString songDirectory)
 
 void Controls::playSong(wxMediaEvent& evt)
 {
-  if (updateSlider != nullptr) { delete updateSlider; updateSlider = nullptr; }
+  if (updateSlider != nullptr)
+  {
+    songCache = updateSlider->getSongCache();
+    delete updateSlider; updateSlider = nullptr;
+  }
 
   // Getting song name and extension to display
   wxString song = playlist->GetString(playlist->GetSelection());
@@ -181,7 +185,7 @@ void Controls::playSong(wxMediaEvent& evt)
   songInformation->SetLabel("\n" + song + "\n" + songExtension);
 
   // Initialize updateSlider
-  updateSlider = new UpdateSlider(slider, mediaPlayer, playlist);
+  updateSlider = new UpdateSlider(slider, mediaPlayer, playlist, songCache, shuffleOn);
 
   mediaPlayer->Play();
 }
@@ -192,6 +196,8 @@ void Controls::toggleShuffle(wxCommandEvent& evt)
 {
   if (shuffleOn == 0) shuffleOn = 1;
   else shuffleOn = 0;
+
+  updateSlider->setShuffle(shuffleOn);
 }
 
 void Controls::previousSong(wxCommandEvent& evt)
