@@ -4,8 +4,10 @@
 
 enum
 {
-  SHOWCONTROLS,
-  CHANGE_DIR
+  YT2MP3,
+  CHANGE_DIR,
+  REFRESH,
+  SHOWCONTROLS
 };
 
 class MenuBar : public wxMenuBar
@@ -16,8 +18,10 @@ class MenuBar : public wxMenuBar
  private:
   wxMenu* file;
     wxMenuItem* fileExit;
+    wxMenuItem* fileYt2Mp3;
     wxMenuItem* fileChangeDirectory;
   wxMenu* view;
+    wxMenuItem* viewRefreshPlaylist;
     wxMenuItem* viewShowControls;
 };
 

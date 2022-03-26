@@ -7,6 +7,8 @@
 
 enum
 {
+  YT2MP3_INP,
+  YT2MP3_BUTTON,
   CHANGE_DIR_INP,
   CHANGE_DIR_BUTTON,
   QUEUE
@@ -19,10 +21,13 @@ class Frame : public wxFrame
   ~Frame();
 
   // MenuBar event functions
-  void exit(wxCommandEvent&);
-  void toggleControls(wxCommandEvent&);
+  void yt2Mp3(wxCommandEvent&);
+    void convertLink(wxCommandEvent&);
   void changeDirectory(wxCommandEvent&);
     void setDirectory(wxCommandEvent&);
+  void exit(wxCommandEvent&);
+  void refreshPlaylist(wxCommandEvent&);
+  void toggleControls(wxCommandEvent&);
   void playlistMenu(wxMouseEvent&);
     void queueSong(wxCommandEvent&);
 
