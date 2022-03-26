@@ -12,7 +12,9 @@ enum
   SHUFFLE,
   PREV,
   PLAY,
-  NEXT
+  NEXT,
+  VOLUME_SLIDER,
+  MUSIC_SLIDER
 };
 
 class Controls : public wxPanel
@@ -26,7 +28,6 @@ class Controls : public wxPanel
   void playSong(wxMediaEvent&);
 
   void setPlaylist(SongList*);
-
   void addToQueue(wxString);
 
   // Button (shuffle, prev, play/pause, next) event functions
@@ -34,6 +35,8 @@ class Controls : public wxPanel
   void previousSong(wxCommandEvent&);
   void togglePlay(wxCommandEvent&);
   void nextSong(wxCommandEvent&);
+
+  void changeSliderPosition(wxScrollEvent&);
 
  private:
   DECLARE_EVENT_TABLE();

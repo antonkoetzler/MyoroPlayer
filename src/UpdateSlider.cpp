@@ -1,11 +1,12 @@
 #include "UpdateSlider.h"
 
-UpdateSlider::UpdateSlider(wxSlider* sliderArg, wxMediaCtrl* mediaPlayerArg, SongList* playlistArg, wxVector<wxString> songCacheArg, int shuffleArg, wxString currentSongArg) : wxTimer()
+UpdateSlider::UpdateSlider(wxSlider* sliderArg, wxMediaCtrl* mediaPlayerArg, SongList* playlistArg, wxVector<wxString> songCacheArg, int shuffleArg, wxString currentSongArg, wxVector<wxString> queueArg) : wxTimer()
 {
   mediaPlayer = mediaPlayerArg;
   slider = sliderArg;
   playlist = playlistArg;
   songCache = songCacheArg;
+  queue = queueArg;
   shuffleOn = shuffleArg;
   currentSong = currentSongArg;
   Start(500);
@@ -29,30 +30,54 @@ void UpdateSlider::Notify()
 
     int nextSongIndex = 0;
 
-    wxString currentSongParsed = wxEmptyString;
-    if (shuffleOn == 0)
+    if (!queue.empty())
     {
-      // Removing directory from currentSong
-      for (int i = (currentSong.length() - 1); i >= 0; i--)
+      wxString song = queue[queue.size() - 1];
+      queue.pop_back();
+      // Removing directory from song
+      for (int i = (song.length() - 1); i >= 0; i--)
       {
         #ifdef linux
-        if (currentSong[i] == '/')
+        if (song[i] == '/')
         #endif
         #ifdef _WIN32
-        if (currentSong[i] == '\\')
+        if (song[i] == '\\')
         #endif
         {
-          currentSongParsed = currentSong.substr(i + 1);
+          song = song.substr(i + 1);
           break;
         }
       }
 
-      nextSongIndex = playlist->FindString(currentSongParsed);
-      if (nextSongIndex == (playlist->GetCount() - 1))
-        nextSongIndex = 0;
-      else
-        nextSongIndex += 1;
-    } else nextSongIndex = rand() % playlist->GetCount();
+      nextSongIndex = playlist->FindString(song);
+    }
+    else
+    {
+      wxString currentSongParsed = wxEmptyString;
+      if (shuffleOn == 0)
+      {
+        // Removing directory from currentSong
+        for (int i = (currentSong.length() - 1); i >= 0; i--)
+        {
+          #ifdef linux
+          if (currentSong[i] == '/')
+          #endif
+          #ifdef _WIN32
+          if (currentSong[i] == '\\')
+          #endif
+          {
+            currentSongParsed = currentSong.substr(i + 1);
+            break;
+          }
+        }
+
+        nextSongIndex = playlist->FindString(currentSongParsed);
+        if (nextSongIndex == (playlist->GetCount() - 1))
+          nextSongIndex = 0;
+        else
+          nextSongIndex += 1;
+      } else nextSongIndex = rand() % playlist->GetCount();
+    }
 
     playlist->SetSelection(nextSongIndex);
 
@@ -69,6 +94,10 @@ void UpdateSlider::Notify()
 void UpdateSlider::setShuffle(int shuffleArg) { shuffleOn = shuffleArg; }
 
 wxVector<wxString> UpdateSlider::getSongCache() { return songCache; }
+
+wxVector<wxString> UpdateSlider::getQueue() { return queue; }
+
+void UpdateSlider::addToQueue(wxString song) { queue.push_back(song); }
 
 wxString UpdateSlider::getCurrentSong() { return currentSong; } 
 

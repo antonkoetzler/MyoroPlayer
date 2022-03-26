@@ -8,10 +8,12 @@
 class UpdateSlider : public wxTimer
 {
  public:
-  UpdateSlider(wxSlider*, wxMediaCtrl*, SongList*, wxVector<wxString>, int, wxString);
+  UpdateSlider(wxSlider*, wxMediaCtrl*, SongList*, wxVector<wxString>, int, wxString, wxVector<wxString>);
   void Notify() wxOVERRIDE;
   void setShuffle(int);
   wxVector<wxString> getSongCache();
+  wxVector<wxString> getQueue();
+  void addToQueue(wxString);
   wxString getCurrentSong();
   bool getReturnSongs();
 
@@ -21,6 +23,7 @@ class UpdateSlider : public wxTimer
   SongList* playlist;
   wxVector<wxString> songCache;
     bool returnSongs = false;
+  wxVector<wxString> queue;
   int shuffleOn = 0;
   wxString currentSong;
 };

@@ -4,6 +4,9 @@ BEGIN_EVENT_TABLE(Controls, wxPanel)
   // Catching mediaPlayer->Load(...)
   EVT_MEDIA_LOADED(MEDIA, Controls::playSong)
 
+  // Music and volume slider event
+  EVT_SCROLL_THUMBRELEASE(Controls::changeSliderPosition)
+
   // Button (shuffle, prev, play/pause, next)  events
   EVT_BUTTON(SHUFFLE, Controls::toggleShuffle)
   EVT_BUTTON(PREV, Controls::previousSong)
@@ -44,7 +47,7 @@ Controls::Controls(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxDefaultPositio
 
   volume = new wxSlider(
     this,
-    wxID_ANY,
+    VOLUME_SLIDER,
     100,
     0,
     100,
@@ -66,7 +69,7 @@ void Controls::setMainControls()
   #ifdef linux
     slider = new wxSlider(
       this,
-      wxID_ANY,
+      MUSIC_SLIDER,
       1,
       0,
       100,
@@ -77,7 +80,7 @@ void Controls::setMainControls()
   #ifdef _WIN32
     slider = new wxSlider(
       this,
-      wxID_ANY,
+      MUSIC_SLIDER,
       1,
       0,
       100,
@@ -134,7 +137,13 @@ void Controls::setMainControls()
 
 void Controls::initMediaPlayer(wxString songDirectory)
 {
-  if (mediaPlayer != nullptr) { delete mediaPlayer; mediaPlayer = nullptr; }
+  double* previousVolume = nullptr;
+
+  if (mediaPlayer != nullptr)
+  {
+    previousVolume = new double(mediaPlayer->GetVolume());
+    delete mediaPlayer; mediaPlayer = nullptr;
+  }
 
   #ifdef linux
     mediaPlayer = new wxMediaCtrl(this, MEDIA);
@@ -151,7 +160,11 @@ void Controls::initMediaPlayer(wxString songDirectory)
     );
   #endif
 
-  mediaPlayer->SetVolume(1.0);
+  if (previousVolume != nullptr)
+  {
+    mediaPlayer->SetVolume(*previousVolume);
+    delete previousVolume; previousVolume = nullptr;
+  } else mediaPlayer->SetVolume(1.0);
 
   // Putting the song that was playing into songCache
   if (currentSong != wxEmptyString) songCache.push_back(currentSong);
@@ -168,6 +181,7 @@ void Controls::playSong(wxMediaEvent& evt)
     {
       currentSong = updateSlider->getCurrentSong();
       songCache = updateSlider->getSongCache();
+      queue = updateSlider->getQueue();
     }
     delete updateSlider; updateSlider = nullptr;
   }
@@ -191,14 +205,18 @@ void Controls::playSong(wxMediaEvent& evt)
   songInformation->SetLabel("\n" + song + "\n" + songExtension);
 
   // Initialize updateSlider
-  updateSlider = new UpdateSlider(slider, mediaPlayer, playlist, songCache, shuffleOn, currentSong);
+  updateSlider = new UpdateSlider(slider, mediaPlayer, playlist, songCache, shuffleOn, currentSong, queue);
 
   mediaPlayer->Play();
 }
 
 void Controls::setPlaylist(SongList* playlistArg) { playlist = playlistArg; }
 
-void Controls::addToQueue(wxString song) { queue.push_back(song); }
+void Controls::addToQueue(wxString song)
+{
+  queue.push_back(song);
+  if (updateSlider != nullptr) updateSlider->addToQueue(song);
+}
 
 void Controls::toggleShuffle(wxCommandEvent& evt)
 {
@@ -230,7 +248,13 @@ void Controls::togglePlay(wxCommandEvent& evt)
 
 void Controls::nextSong(wxCommandEvent& evt)
 {
-  if (mediaPlayer != nullptr) { delete mediaPlayer; mediaPlayer = nullptr; }
+  double* previousVolume = nullptr;
+
+  if (mediaPlayer != nullptr)
+  {
+    previousVolume = new double(mediaPlayer->GetVolume());
+    delete mediaPlayer; mediaPlayer = nullptr;
+  }
 
   #ifdef linux
     mediaPlayer = new wxMediaCtrl(this, MEDIA);
@@ -247,34 +271,64 @@ void Controls::nextSong(wxCommandEvent& evt)
     );
   #endif
 
+  if (previousVolume != nullptr)
+  {
+    mediaPlayer->SetVolume(*previousVolume);
+    delete previousVolume; previousVolume = nullptr;
+  } else mediaPlayer->SetVolume(1.0);
+
   // Adding currentSong to the songCache
   songCache.push_back(currentSong);
 
   int nextSongIndex = 0;
 
-  if (shuffleOn == 0)
+  if (!queue.empty())
   {
-    // Removing directory from currentSong
-    for (int i = (currentSong.length() - 1); i >= 0; i--)
+    wxString song = queue[queue.size() - 1];
+    queue.pop_back();
+    // Removing directory from song
+    for (int i = (song.length() - 1); i >= 0; i--)
     {
       #ifdef linux
-      if (currentSong[i] == '/')
+      if (song[i] == '/')
       #endif
       #ifdef _WIN32
-      if (currentSong[i] == '\\')
+      if (song[i] == '\\')
       #endif
       {
-        currentSong = currentSong.substr(i + 1);
+        song = song.substr(i + 1);
         break;
       }
     }
 
-    nextSongIndex = playlist->FindString(currentSong);
-    if (nextSongIndex == (playlist->GetCount() - 1))
-      nextSongIndex = 0;
-    else
-      nextSongIndex += 1;
-  } else nextSongIndex = rand() % playlist->GetCount();
+    nextSongIndex = playlist->FindString(song);
+  }
+  else
+  {
+    if (shuffleOn == 0)
+    {
+      // Removing directory from currentSong
+      for (int i = (currentSong.length() - 1); i >= 0; i--)
+      {
+        #ifdef linux
+        if (currentSong[i] == '/')
+        #endif
+        #ifdef _WIN32
+        if (currentSong[i] == '\\')
+        #endif
+        {
+          currentSong = currentSong.substr(i + 1);
+          break;
+        }
+      }
+
+      nextSongIndex = playlist->FindString(currentSong);
+      if (nextSongIndex == (playlist->GetCount() - 1))
+        nextSongIndex = 0;
+      else
+        nextSongIndex += 1;
+    } else nextSongIndex = rand() % playlist->GetCount();
+  }
 
   playlist->SetSelection(nextSongIndex);
 
@@ -283,5 +337,21 @@ void Controls::nextSong(wxCommandEvent& evt)
   currentSong = playlist->getPlaylistDirectory() + currentSong;
 
   if (!mediaPlayer->Load(currentSong)) { exit(1); }
+}
+
+void Controls::changeSliderPosition(wxScrollEvent& evt)
+{
+  switch (evt.GetId())
+  {
+    case MUSIC_SLIDER:
+      slider->SetValue(evt.GetPosition());
+      mediaPlayer->Seek(evt.GetPosition() * 1000);
+      break;
+    case VOLUME_SLIDER:
+      volume->SetValue(evt.GetPosition());
+      double volume = (double)evt.GetPosition() / 100;
+      mediaPlayer->SetVolume(volume);
+      break;
+  }
 }
 
