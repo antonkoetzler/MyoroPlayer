@@ -1,17 +1,14 @@
 #include "UpdateSlider.h"
 
-UpdateSlider::UpdateSlider(wxSlider* sliderArg, wxMediaCtrl* mediaPlayerArg, SongList* playlistArg, wxVector<wxString> songCacheArg, int shuffleArg) : wxTimer()
+UpdateSlider::UpdateSlider(wxSlider* sliderArg, wxMediaCtrl* mediaPlayerArg, SongList* playlistArg, wxVector<wxString> songCacheArg, int shuffleArg, wxString currentSongArg) : wxTimer()
 {
   mediaPlayer = mediaPlayerArg;
   slider = sliderArg;
   playlist = playlistArg;
   songCache = songCacheArg;
   shuffleOn = shuffleArg;
+  currentSong = currentSongArg;
   Start(500);
-
-  for (size_t i = 0; i < songCache.size(); i++)
-    std::cout << songCache[i] << std::endl;
-  std::cout << std::endl;
 }
 
 void UpdateSlider::Notify()
@@ -28,12 +25,13 @@ void UpdateSlider::Notify()
 
   if (mediaPlayer->GetState() == wxMEDIASTATE_STOPPED)
   {
+    songCache.push_back(currentSong);
+
     int nextSongIndex = 0;
 
+    wxString currentSongParsed = wxEmptyString;
     if (shuffleOn == 0)
     {
-      wxString currentSong = songCache[songCache.size() - 1];
-
       // Removing directory from currentSong
       for (int i = (currentSong.length() - 1); i >= 0; i--)
       {
@@ -44,12 +42,12 @@ void UpdateSlider::Notify()
         if (currentSong[i] == '\\')
         #endif
         {
-          currentSong = currentSong.substr(i + 1);
+          currentSongParsed = currentSong.substr(i + 1);
           break;
         }
       }
 
-      nextSongIndex = playlist->FindString(currentSong);
+      nextSongIndex = playlist->FindString(currentSongParsed);
       if (nextSongIndex == (playlist->GetCount() - 1))
         nextSongIndex = 0;
       else
@@ -59,16 +57,20 @@ void UpdateSlider::Notify()
     playlist->SetSelection(nextSongIndex);
 
     // Getting the next song's filename + directory
-    wxString songDirectory = playlist->GetString(nextSongIndex);
-    songDirectory = playlist->getPlaylistDirectory() + songDirectory;
+    currentSong = playlist->GetString(nextSongIndex);
+    currentSong = playlist->getPlaylistDirectory() + currentSong;
 
-    songCache.push_back(songDirectory);
+    returnSongs = true;
 
-    if (!mediaPlayer->Load(songDirectory)) { exit(1); }
+    if (!mediaPlayer->Load(currentSong)) { exit(1); }
   }
 }
 
 void UpdateSlider::setShuffle(int shuffleArg) { shuffleOn = shuffleArg; }
 
 wxVector<wxString> UpdateSlider::getSongCache() { return songCache; }
+
+wxString UpdateSlider::getCurrentSong() { return currentSong; } 
+
+bool UpdateSlider::getReturnSongs() { return returnSongs; }
 

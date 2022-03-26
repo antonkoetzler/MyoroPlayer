@@ -154,7 +154,7 @@ void Controls::initMediaPlayer(wxString songDirectory)
   mediaPlayer->SetVolume(1.0);
 
   // Putting the song that was playing into songCache
-  songCache.push_back(currentSong);
+  if (currentSong != wxEmptyString) songCache.push_back(currentSong);
   currentSong = songDirectory;
 
   if (!mediaPlayer->Load(currentSong)) { exit(1); }
@@ -164,7 +164,11 @@ void Controls::playSong(wxMediaEvent& evt)
 {
   if (updateSlider != nullptr)
   {
-    //songCache = updateSlider->getSongCache();
+    if (updateSlider->getReturnSongs())
+    {
+      currentSong = updateSlider->getCurrentSong();
+      songCache = updateSlider->getSongCache();
+    }
     delete updateSlider; updateSlider = nullptr;
   }
 
@@ -187,7 +191,7 @@ void Controls::playSong(wxMediaEvent& evt)
   songInformation->SetLabel("\n" + song + "\n" + songExtension);
 
   // Initialize updateSlider
-  updateSlider = new UpdateSlider(slider, mediaPlayer, playlist, songCache, shuffleOn);
+  updateSlider = new UpdateSlider(slider, mediaPlayer, playlist, songCache, shuffleOn, currentSong);
 
   mediaPlayer->Play();
 }
@@ -206,34 +210,12 @@ void Controls::previousSong(wxCommandEvent& evt)
 {
   int songCacheSize = songCache.size();
 
-  // Since the current song playing is the
-  // last element of songCache, we need to
-  // check if there is one more song to play
-  if (songCacheSize >= 2) songCache.pop_back();
-  else return;
+  if (songCacheSize < 1) return;
 
-  wxString song = songCache[songCache.size() - 1];
-
-  // Removing directory from song
-  for (int i = (song.length() - 1); i >= 0; i--)
-  {
-    #ifdef linux
-    if (song[i] == '/')
-    #endif
-    #ifdef _WIN32
-    if (song[i] == '\\')
-    #endif
-    {
-      song = song.substr(i + 1);
-      break;
-    }
-  }
-
-  playlist->SetSelection(playlist->FindString(song));
-
-  if (!mediaPlayer->Load(songCache[songCache.size() - 1])) { exit(1); }
-
+  wxString newSong = songCache[songCacheSize - 1];
   songCache.pop_back();
+
+  if (!mediaPlayer->Load(newSong)) { exit(1); }
 }
 
 void Controls::togglePlay(wxCommandEvent& evt)
@@ -297,8 +279,6 @@ void Controls::nextSong(wxCommandEvent& evt)
   // Getting the next song's file name + directory
   currentSong = playlist->GetString(nextSongIndex);
   currentSong = playlist->getPlaylistDirectory() + currentSong;
-
-  std::cout << "CURRENTSONG: " << currentSong << std::endl;
 
   if (!mediaPlayer->Load(currentSong)) { exit(1); }
 }
