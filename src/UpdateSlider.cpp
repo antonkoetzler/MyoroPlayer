@@ -8,6 +8,10 @@ UpdateSlider::UpdateSlider(wxSlider* sliderArg, wxMediaCtrl* mediaPlayerArg, Son
   songCache = songCacheArg;
   shuffleOn = shuffleArg;
   Start(500);
+
+  for (size_t i = 0; i < songCache.size(); i++)
+    std::cout << songCache[i] << std::endl;
+  std::cout << std::endl;
 }
 
 void UpdateSlider::Notify()

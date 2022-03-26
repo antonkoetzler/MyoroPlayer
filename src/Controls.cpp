@@ -153,16 +153,18 @@ void Controls::initMediaPlayer(wxString songDirectory)
 
   mediaPlayer->SetVolume(1.0);
 
-  songCache.push_back(songDirectory);
+  // Putting the song that was playing into songCache
+  songCache.push_back(currentSong);
+  currentSong = songDirectory;
 
-  if (!mediaPlayer->Load(songDirectory)) { exit(1); }
+  if (!mediaPlayer->Load(currentSong)) { exit(1); }
 }
 
 void Controls::playSong(wxMediaEvent& evt)
 {
   if (updateSlider != nullptr)
   {
-    songCache = updateSlider->getSongCache();
+    //songCache = updateSlider->getSongCache();
     delete updateSlider; updateSlider = nullptr;
   }
 
@@ -261,12 +263,13 @@ void Controls::nextSong(wxCommandEvent& evt)
     );
   #endif
 
+  // Adding currentSong to the songCache
+  songCache.push_back(currentSong);
+
   int nextSongIndex = 0;
 
   if (shuffleOn == 0)
   {
-    wxString currentSong = songCache[songCache.size() - 1];
-
     // Removing directory from currentSong
     for (int i = (currentSong.length() - 1); i >= 0; i--)
     {
@@ -292,11 +295,11 @@ void Controls::nextSong(wxCommandEvent& evt)
   playlist->SetSelection(nextSongIndex);
 
   // Getting the next song's file name + directory
-  wxString songDirectory = playlist->GetString(nextSongIndex);
-  songDirectory = playlist->getPlaylistDirectory() + songDirectory;
+  currentSong = playlist->GetString(nextSongIndex);
+  currentSong = playlist->getPlaylistDirectory() + currentSong;
 
-  songCache.push_back(songDirectory);
+  std::cout << "CURRENTSONG: " << currentSong << std::endl;
 
-  if (!mediaPlayer->Load(songDirectory)) { exit(1); }
+  if (!mediaPlayer->Load(currentSong)) { exit(1); }
 }
 

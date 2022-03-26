@@ -57,5 +57,6 @@ class Controls : public wxPanel
   UpdateSlider* updateSlider = nullptr;
 
   wxVector<wxString> songCache;
+  wxString currentSong = wxEmptyString;
 };
 
