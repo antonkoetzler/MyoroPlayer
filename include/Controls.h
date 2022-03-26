@@ -27,6 +27,8 @@ class Controls : public wxPanel
 
   void setPlaylist(SongList*);
 
+  void addToQueue(wxString);
+
   // Button (shuffle, prev, play/pause, next) event functions
   void toggleShuffle(wxCommandEvent&);
   void previousSong(wxCommandEvent&);
@@ -57,6 +59,7 @@ class Controls : public wxPanel
   UpdateSlider* updateSlider = nullptr;
 
   wxVector<wxString> songCache;
+  wxVector<wxString> queue;
   wxString currentSong = wxEmptyString;
 };
 

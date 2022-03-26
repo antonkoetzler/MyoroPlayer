@@ -5,6 +5,7 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(wxID_EXIT, Frame::exit)
   EVT_MENU(SHOWCONTROLS, Frame::toggleControls)
   EVT_MENU(CHANGE_DIR, Frame::changeDirectory)
+  EVT_MENU(QUEUE, Frame::queueSong)
 
   // Listbox events
   EVT_LISTBOX_DCLICK(SONGLIST, Frame::initSong)
@@ -25,6 +26,9 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "MyoroPlayer", wxDefaultPosition, wx
   sizer = new wxBoxSizer(wxVERTICAL);
   sizer->Add(playlist, 1, wxEXPAND);
   sizer->Add(controls, 0, wxEXPAND);
+
+  // Connect right click to bringing up popup menu
+  playlist->Connect(wxEVT_RIGHT_UP, wxMouseEventHandler(Frame::playlistMenu), nullptr, this);
 
   SetMenuBar(menubar);
   SetSizer(sizer);
@@ -92,6 +96,30 @@ void Frame::setDirectory(wxCommandEvent& evt)
   sizer->Add(playlist, 1, wxEXPAND);
   sizer->Add(controls, 0, wxEXPAND);
   sizer->Layout();
+}
+
+void Frame::playlistMenu(wxMouseEvent& evt)
+{
+  wxClientDC dc(this);
+  playlist->SetSelection(playlist->HitTest(evt.GetLogicalPosition(dc)));
+
+  wxMenuItem* popupQueue = new wxMenuItem(
+    nullptr,
+    QUEUE,
+    "Queue song"
+  );
+
+  wxMenu* popup = new wxMenu();
+  popup->Append(popupQueue);
+
+  PopupMenu(popup, wxDefaultPosition);
+}
+
+void Frame::queueSong(wxCommandEvent& evt)
+{
+  wxString song = playlist->GetString(playlist->GetSelection());
+  wxString songDirectory = playlist->getPlaylistDirectory() + song;
+  controls->addToQueue(songDirectory);
 }
 
 void Frame::initSong(wxCommandEvent& evt)

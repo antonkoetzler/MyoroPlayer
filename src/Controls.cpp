@@ -198,6 +198,8 @@ void Controls::playSong(wxMediaEvent& evt)
 
 void Controls::setPlaylist(SongList* playlistArg) { playlist = playlistArg; }
 
+void Controls::addToQueue(wxString song) { queue.push_back(song); }
+
 void Controls::toggleShuffle(wxCommandEvent& evt)
 {
   if (shuffleOn == 0) shuffleOn = 1;
