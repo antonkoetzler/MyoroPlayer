@@ -111,7 +111,12 @@ void Frame::convertLink(wxCommandEvent& evt)
     return;
   }
 
-  wxString command = "youtube-dl --extract-audio --audio-format mp3 -o \"" + playlist->getPlaylistDirectory() + "%(title)s-%(id)s.mp3\" " + inp->GetLineText(0);
+  #ifdef linux
+    wxString command = "youtube-dl --extract-audio --audio-format mp3 -o \"" + playlist->getPlaylistDirectory() + "%(title)s-%(id)s.mp3\" " + inp->GetLineText(0);
+  #endif
+  #ifdef _WIN32
+    wxString command = "youtube-dl.exe --extract-audio --audio-format mp3 -o \"" + playlist->getPlaylistDirectory() + "%(title)s-%(id)s.mp3\" " + inp->GetLineText(0);
+  #endif
   wxExecute(command);
 
   wxMessageDialog* message = new wxMessageDialog(
