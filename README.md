@@ -7,10 +7,10 @@ A libre MP3 player with Youtube to MP3
   - Support for Windows & Ubuntu
 2. Download an installer appropriate to your operating system
 3. Linux installation
-  1. Download MyoroPlayerUbuntu.zip to your downloads directory
-  2. `unzip MyoroPlayerUbuntu.zip; cd MyoroPlayerUbuntu; sh Ubuntu\ Install.sh`
-  3. Enter your password, as the script installs the package youtube-dl
-  4. Done.
+  - Download MyoroPlayerUbuntu.zip to your downloads directory
+  - `unzip MyoroPlayerUbuntu.zip; cd MyoroPlayerUbuntu; sh Ubuntu\ Install.sh`
+  - Enter your password, as the script installs the package youtube-dl
+  - Done.
 ## Installing by source
 - Prerequisites
   1. CMake
