@@ -23,4 +23,8 @@ A libre MP3 player with Youtube to MP3
 4. Linux: `cmake -G "Unix Makefiles" -S ./ -B ./build; cd build; make`
 5. Now you can place the executable & the songs folder into a folder and place wherever
 
+# Troubleshooting
+## Linux
+1. If your MyoroPlayer is not working, make sure `build-essential` and `libgtk-3-dev` are installed
+
 Inspired by Audacity
