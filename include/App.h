@@ -11,4 +11,3 @@ class App : public wxApp
  private:
   Frame* window;
 };
-

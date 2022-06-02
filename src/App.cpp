@@ -8,4 +8,3 @@ bool App::OnInit()
   window->Show(true);
   return true;
 }
-
