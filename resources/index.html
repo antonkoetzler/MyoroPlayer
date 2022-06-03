@@ -14,21 +14,36 @@
     <!-- Div box for the button and dropdown menu -->
     <div>
       <!-- Button -->
-      <button>File</button>
+      <button class="taskbarButton" onclick="toggleDropdown('file')">File</button>
 
       <!-- Div box -->
-      <ul>
+      <ul style="border-left: none;" id="file">
+        <button class="taskbarButton taskbarDropdownButton">New Playlist ~ Ctrl + N</button>
+        <button class="taskbarButton taskbarDropdownButton">Quit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~ Ctrl + Q</button>
       </ul>
     </div>
 
     <spacer type="vertical"></spacer>
 
     <div>
-      <button>View</button>
-      <ul>
+      <button class="taskbarButton" onclick="toggleDropdown('view')">View</button>
+      <ul id="view" style="left: 50px;">
+        <button class="taskbarButton taskbarDropdownButton">Enable Sidebar ~ Alt + S</button>
       </ul>
     </div>
   </header>
+
+  <!-- Sidebar for listing playlists -->
+  <ul id="sidebar">
+    <button class="taskbarButton sidebarButton" onclick="toggleDirectoryPopup()">Add Playlist</button>
+  </ul>
+
+  <!-- Directory popup to add a new playlist -->
+  <div id="directoryPopup">
+    <p id="directoryPopupErrorMessage"></p>
+    <input id="directoryPopupInput" type="text" placeholder="i.e. C:/Users/ or /home/flqn/">
+    <button>Add</button>
+  </div>
 </body>
 
 </html>
