@@ -1,5 +1,46 @@
+@font-face
+{
+  font-family: "Ubuntu Regular";
+  src: url("./fonts/Ubuntu-R.ttf");
+}
+
 body
 {
   margin: 0; padding: 0;
   background: #FFFFFF;
+}
+
+/* Taskbar */
+body > header
+{
+  display: flex;
+  flex-flow: row nowrap;
+  height: 30px; width: 100%;
+  border-bottom: 2px solid #008080;
+  position: fixed; top: 0; left: 0;
+}
+
+/* Taskbar button */
+body > header > div > button
+{
+  height: 30px;
+  margin: 0; padding: 2px 5px;
+  background: none; outline: none; border: none;
+
+  font-family: "Ubuntu Regular";
+  font-size: 20px; color: #008080;
+
+  cursor: pointer;
+}
+body > header > div > button:hover
+{
+  background: #008080;
+  color: #FFFFFF;
+}
+
+/* Spacer for taskbar buttons */
+body > header > spacer
+{
+  height: 30px; width: 2px;
+  background: #008080;
 }
