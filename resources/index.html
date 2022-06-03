@@ -28,22 +28,29 @@
     <div>
       <button class="taskbarButton" onclick="toggleDropdown('view')">View</button>
       <ul id="view" style="left: 50px;">
-        <button class="taskbarButton taskbarDropdownButton">Enable Sidebar ~ Alt + S</button>
+        <button class="taskbarButton taskbarDropdownButton" onclick="toggleSidebar()">Enable Sidebar ~ Alt + S</button>
       </ul>
     </div>
   </header>
 
   <!-- Sidebar for listing playlists -->
-  <ul id="sidebar">
+  <aside id="sidebar">
     <button class="taskbarButton sidebarButton" onclick="toggleDirectoryPopup()">Add Playlist</button>
-  </ul>
+  </aside>
+
+  <!-- Song list -->
+  <main id="songlist">
+  </main>
 
   <!-- Directory popup to add a new playlist -->
   <div id="directoryPopup">
     <p id="directoryPopupErrorMessage"></p>
-    <input id="directoryPopupInput" type="text" placeholder="i.e. C:/Users/ or /home/flqn/">
-    <button>Add</button>
+    <input id="directoryPopupInput" type="text" placeholder="i.e. C:/Users/ or /home/flqn/" onkeydown="addPlaylistEnterActivation()">
+    <button onclick="addPlaylist()">Add</button>
   </div>
+
+  <!-- Music player -->
+  <audio id="player" src="" controls></audio>
 </body>
 
 </html>

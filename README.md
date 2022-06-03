@@ -28,3 +28,6 @@ A libre MP3 player with Youtube to MP3
 1. If your MyoroPlayer is not working, make sure `build-essential` and `libgtk-3-dev` are installed
 
 Inspired by Audacity
+
+# Add command prompt fix
+# Add UTF fix (environment > system locale)
