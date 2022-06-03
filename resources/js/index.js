@@ -257,7 +257,7 @@ async function openPlaylist(directory)
   let extension = ""
   for (var i = 0; i < files.length; i++)
   {
-    if (files[i].entry != "." && files[i].entry != "..")
+    if (files[i].entry != "." && files[i].entry != ".." && files[i].type == "FILE")
     {
       file = files[i].entry
 
