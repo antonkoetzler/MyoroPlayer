@@ -43,7 +43,9 @@ window.onload = async function()
     {
       if (savedPlaylists[i] == '\n')
       {
-        let temp = savedPlaylists.substr(0, i - 1)
+        let temp = ""
+        if (NL_OS == "Windows") temp = savedPlaylists.substr(0, i - 1)
+        else                    temp = savedPlaylists.substr(0, i)
         for (var o = (temp.length - 2); o >= 0; o--)
         {
           if (temp[o] == '/')
