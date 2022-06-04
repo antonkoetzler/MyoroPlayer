@@ -1,6 +1,8 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain } = require("electron")
+const path = require("path")
 
-ipcMain.on("msg", (event, data) => { console.log("data") })
+// Quit event
+ipcMain.on("quit", (event, data) => { app.exit(0) })
 
 // Creates a new window
 const createWindow = () => {
@@ -11,7 +13,7 @@ const createWindow = () => {
     minHeight: 400,
     title: "MyoroPlayer",
     webPreferences: {
-      nodeIntegration: true
+      preload: path.join(__dirname, "preload.js")
     }
   })
   win.loadFile("index.html")

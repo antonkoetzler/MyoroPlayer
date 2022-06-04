@@ -1,13 +1,22 @@
+window.addEventListener("keydown", () => {
+  if (event.ctrlKey)
+  {
+    switch (event.keyCode)
+    {
+      // Ctrl + Q ~ Quit
+      case 81: quit()
+    }
+  }
+})
+
 // Disables every dropdown menu enabled
-function cleanDropdowns()
-{
+function cleanDropdowns() {
   document.getElementById("file").style.display = "none"
   document.getElementById("view").style.display = "none"
 }
 
 // Enables/disables a dropdown menu
-function toggleDropdown(id)
-{
+function toggleDropdown(id) {
   let dropdown = document.getElementById(id)
   let dropdownDisplay = window.getComputedStyle(dropdown).display
   cleanDropdowns()
@@ -15,4 +24,4 @@ function toggleDropdown(id)
   else                           dropdown.style.display = "none"
 }
 
-function ipc() { alert("hi") }
+function quit() { ipc.send("quit", "") }
