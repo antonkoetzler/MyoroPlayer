@@ -10,6 +10,23 @@
 <body>
   <!-- Taskbar -->
   <header>
+    <!-- Div box with taskbar button and dropdown menu -->
+    <div>
+      <button class="taskbarButton" onclick="toggleDropdown('file')">File</button>
+      <ul id="file">
+        <button class="taskbarButton dropdownButton" style="border-left: none; border-top: 2px solid #7393B3;">Add Playlist ~ Ctrl + N</button>
+        <button class="taskbarButton dropdownButton" style="border-left: none; border-bottom: 2px solid #7393B3;">Quit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~ Ctrl + Q</button>
+      </ul>
+    </div>
+
+    <spacer type="vertical"></spacer>
+
+    <div>
+      <button class="taskbarButton" onclick="toggleDropdown('view')">View</button>
+      <ul id="view" style="left: 50px;">
+        <button class="taskbarButton dropdownButton" style="border-top: 2px solid #7393B3;">Show Sidebar&nbsp;&nbsp;~ Alt + S</button>
+        <button class="taskbarButton dropdownButton" style="border-bottom: 2px solid #7393B3;">Show Controls ~ Alt + C</button>
+    </div>
   </header>
 </body>
 

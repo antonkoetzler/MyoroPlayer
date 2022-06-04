@@ -5,7 +5,9 @@ const createWindow = () =>
 {
   const win = new BrowserWindow({
     width: 800,
-    height: 600
+    height: 600,
+    minWidth: 400,
+    minHeight: 400
   })
   win.loadFile("index.html")
   win.setMenu(null)
