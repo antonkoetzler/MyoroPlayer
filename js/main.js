@@ -1,4 +1,6 @@
-const { app, BrowserWindow, globalShortcut } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
+
+ipcMain.on("msg", (event, data) => { console.log("data") })
 
 // Creates a new window
 const createWindow = () => {
@@ -6,7 +8,11 @@ const createWindow = () => {
     width: 800,
     height: 600,
     minWidth: 400,
-    minHeight: 400
+    minHeight: 400,
+    title: "MyoroPlayer",
+    webPreferences: {
+      nodeIntegration: true
+    }
   })
   win.loadFile("index.html")
   win.setMenu(null)
@@ -14,7 +20,3 @@ const createWindow = () => {
 
 // Once app fires a ready event, we may load index.html
 app.whenReady().then(createWindow)
-app.whenReady().then(() => {
-  // Setting Ctrl + Q to quit the application
-  globalShortcut.register("Ctrl+Q", () => { app.exit(0) })
-}).then(createWindow)

@@ -14,3 +14,5 @@ function toggleDropdown(id)
   if (dropdownDisplay == "none") dropdown.style.display = "flex"
   else                           dropdown.style.display = "none"
 }
+
+function ipc() { alert("hi") }
