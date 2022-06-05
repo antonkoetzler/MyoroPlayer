@@ -19,9 +19,13 @@ window.onload = () => {
 
             let name = null
             let split = null
-            if (os.platform() == "win32") split = directory.split("\\")
-            else                          split = directory.split('/')
-            name = split[split.length - 2]
+            if (directory == "/" || directory.length == 3 && directory.substr(1) == ":\\")
+              name = directory
+            else {
+              if (os.platform() == "win32") split = directory.split("\\")
+              else                          split = directory.split('/')
+              name = split[split.length - 2]
+            }
 
             let button = document.createElement("button")
             button.innerHTML = name
