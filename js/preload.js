@@ -1,5 +1,9 @@
 const { contextBridge, ipcRenderer } = require("electron")
 
+// Where previously added playlists are added on program start
+window.onload = () => {
+  alert("Loaded")
+}
 
 // Adds the directory selected in ipcMain.on("addPlaylist...
 ipcRenderer.on("getPlaylist", (event, dir) => {
