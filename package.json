@@ -4,19 +4,21 @@
   "description": "A libre music player with Youtube to MP3 functionality",
   "main": "js/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder --linux"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/antonkoetzler/MyoroPlayer.git"
   },
-  "author": "Anton Koetzler-Faust",
+  "author": "Anton Koetzler-Faust <antonkoetzler-faust@hotmail.com>",
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/antonkoetzler/MyoroPlayer/issues"
   },
   "homepage": "https://github.com/antonkoetzler/MyoroPlayer#readme",
   "devDependencies": {
-    "electron": "^19.0.3"
+    "electron": "^19.0.3",
+    "electron-builder": "^23.0.3"
   }
 }

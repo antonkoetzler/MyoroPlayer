@@ -73,3 +73,5 @@ function toggleControls()
     controls.style.display = "none"
   }
 }
+
+function playSong(directory) { alert(directory) }

@@ -10,7 +10,7 @@ contextBridge.exposeInMainWorld("ipc", {
 
 // Where previously added playlists are added on program start
 window.onload = () => {
-  fs.readFile(path.join(__dirname, "../.savedPlaylists"), { encoding: "utf-8" }, (error, data) => {
+  fs.readFile(".savedPlaylists", { encoding: "utf-8" }, (error, data) => {
     if (!error) {
       while (true)
       {
@@ -73,7 +73,7 @@ ipcRenderer.on("getPlaylist", (event, dir) => {
   // directory = directory.replaceAll('\\', "\\\\") // Works appropriately when passed via JS argument
 
   // Reads .savedPlaylists and looks for duplicate directories
-  fs.readFile(path.join(__dirname, "../.savedPlaylists"), { encoding: "utf-8" }, (error, data) => {
+  fs.readFile(".savedPlaylists", { encoding: "utf-8" }, (error, data) => {
     if (!error) {
       data = data.toString()
 
@@ -91,7 +91,7 @@ ipcRenderer.on("getPlaylist", (event, dir) => {
         document.getElementById("sidebar").appendChild(button)
 
         // Adding directory to .savedPlaylists
-        fs.appendFile(path.join(__dirname, "../.savedPlaylists"), directory + '\n', (err) => { if (err) console.log(err) })
+        fs.appendFile(".savedPlaylists", directory + '\n', (err) => { if (err) console.log(err) })
 
         document.getElementById("file").style.display = "none"
         document.getElementById("view").style.display = "none"
@@ -104,11 +104,33 @@ ipcRenderer.on("getPlaylist", (event, dir) => {
 
 // Opens a playlist
 ipcRenderer.on("getPlaylistDirectory", (event, dir) => {
+  document.getElementById("songlist").innerHTML = ""
   fs.readdir(dir, { encoding: "utf-8" }, (error, files) => {
     if (!error)
     {
       files.forEach((file) => {
-        alert(file)
+        // Getting name and extension
+        let name = ""
+        let extension = ""
+        for (var i = (file.length - 1); i >= 0; i--)
+        {
+          if (file[i] == '.')
+          {
+            name = file.substr(0, i)
+            extension = file.substr(i + 1)
+            break
+          }
+        }
+
+        if (extension == "mp3")
+        {
+          let songDirectory = dir + file
+          let button = document.createElement("button")
+          button.innerHTML = name
+          button.className = "taskbarButton songButton"
+          button.setAttribute("onClick", "playSong(" + JSON.stringify(songDirectory) + ")")
+          document.getElementById("songlist").appendChild(button)
+        }
       })
     } else console.log(error)
   })
