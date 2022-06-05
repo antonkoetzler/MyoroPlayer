@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron")
+const os = require("os")
 
 // Where previously added playlists are added on program start
 window.onload = () => {
@@ -29,12 +30,16 @@ ipcRenderer.on("getPlaylist", (event, dir) => {
   // Making sure the name isn't too long
   if (name.length > 12) name = name.substr(0, 12)
 
+  // Adding a slash at the end of the directory and making it JS passable
+  if (os.platform() == "win32" && directory.length != 3 && directory.substr(1) !== ":\\") directory += '\\'
+  else if (os.platform() == "linux" && directory != "/")                                  directory += '/'
+  directory = directory.replaceAll('\\', "\\\\")
+
   // Adding button to #sidebar
   let button = document.createElement("button")
   button.innerHTML = name
   button.className = "taskbarButton sidebarButton"
-  // replaceAll is used to make sure JS reads backslashes
-  button.setAttribute("onClick", "openPlaylist('" + directory.replaceAll('\\', '\\\\') + "')")
+  button.setAttribute("onClick", "openPlaylist('" + directory +  "')")
   document.getElementById("sidebar").appendChild(button)
 
   // Since we don't have access to cleanDropdowns, we disable dropdowns manually
