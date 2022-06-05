@@ -24,14 +24,22 @@
     <div>
       <button class="taskbarButton" onclick="toggleDropdown('view')">View</button>
       <ul id="view" style="left: 50px;">
-        <button class="taskbarButton dropdownButton" style="border-top: 2px solid #7393B3;">Show Sidebar&nbsp;&nbsp;~ Alt + S</button>
-        <button class="taskbarButton dropdownButton" style="border-bottom: 2px solid #7393B3;">Show Controls ~ Alt + C</button>
+        <button class="taskbarButton dropdownButton" style="border-top: 2px solid #7393B3;" onclick="toggleSidebar()">Show Sidebar&nbsp;&nbsp;~ Alt + S</button>
+        <button class="taskbarButton dropdownButton" style="border-bottom: 2px solid #7393B3;" onclick="toggleControls()">Show Controls ~ Alt + C</button>
     </div>
   </header>
 
   <!-- Sidebar to hold playlists -->
   <aside id="sidebar">
   </aside>
+
+  <!-- Holds: song list, music controls -->
+  <main id="main">
+    <ul id="songlist">
+    </ul>
+    <div id="controls">
+    </div>
+  </main>
 
   <!-- Error message -->
   <p id="errorMessage">Error</p>

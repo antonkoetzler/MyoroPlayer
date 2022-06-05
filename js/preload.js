@@ -3,6 +3,11 @@ const os = require("os") // For getting OS
 const fs = require("fs") // For reading files (.savedPlaylists)
 const path = require("path")
 
+// Creating an ipc API, can use ipc.send(_, _) in index.js now
+contextBridge.exposeInMainWorld("ipc", {
+  send: (evt, message) => { ipcRenderer.send(evt, message) }
+})
+
 // Where previously added playlists are added on program start
 window.onload = () => {
   fs.readFile(path.join(__dirname, "../.savedPlaylists"), { encoding: "utf-8" }, (error, data) => {
@@ -30,7 +35,7 @@ window.onload = () => {
             let button = document.createElement("button")
             button.innerHTML = name
             button.className = "taskbarButton sidebarButton"
-            button.setAttribute("onClick", "openPlaylist('" + JSON.stringify(directory) + "')")
+            button.setAttribute("onClick", "openPlaylist(" + JSON.stringify(directory) + ")")
             document.getElementById("sidebar").appendChild(button)
 
             break
@@ -82,7 +87,7 @@ ipcRenderer.on("getPlaylist", (event, dir) => {
         let button = document.createElement("button")
         button.innerHTML = name
         button.className = "taskbarButton sidebarButton"
-        button.setAttribute("onClick", "openPlaylist('" + JSON.stringify(directory) + "')")
+        button.setAttribute("onClick", "openPlaylist(" + JSON.stringify(directory) + ")")
         document.getElementById("sidebar").appendChild(button)
 
         // Adding directory to .savedPlaylists
@@ -97,7 +102,14 @@ ipcRenderer.on("getPlaylist", (event, dir) => {
   })
 })
 
-// Creating an ipc API, can use ipc.send(_, _) in index.js now
-contextBridge.exposeInMainWorld("ipc", {
-  send: (evt, message) => { ipcRenderer.send(evt, message) }
+// Opens a playlist
+ipcRenderer.on("getPlaylistDirectory", (event, dir) => {
+  fs.readdir(dir, { encoding: "utf-8" }, (error, files) => {
+    if (!error)
+    {
+      files.forEach((file) => {
+        alert(file)
+      })
+    } else console.log(error)
+  })
 })

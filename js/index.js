@@ -9,6 +9,14 @@ window.addEventListener("keydown", () => {
       case 78: addPlaylist()
     }
   }
+  if (event.altKey) {
+    switch (event.keyCode) {
+      // Alt + S ~ Toggle sidebar
+      case 83: toggleSidebar()
+      // Alt + C ~ Toggle controls
+      case 67: toggleControls()
+    }
+  }
 })
 window.addEventListener("click", () => {
   document.getElementById("errorMessage").style.display = "none"
@@ -34,6 +42,34 @@ function toggleDropdown(id) {
 
 function quit() { ipc.send("quit", "") }
 
+// Adds a new playlist and caches it so it'll automatically load in next time
 function addPlaylist() { ipc.send("addPlaylist", "") }
 
-function openPlaylist(directory) { alert(directory) }
+// Opens a playlist and lists them in the song view
+function openPlaylist(directory) { ipc.send("openPlaylist", directory) }
+
+function toggleSidebar()
+{
+  let sidebar = document.getElementById("sidebar")
+  let main = document.getElementById("main")
+  if (window.getComputedStyle(sidebar).display == "none") {
+    main.style.width = "calc(100% - 124px)"
+    sidebar.style.display = "block"
+  } else {
+    main.style.width = "100%"
+    sidebar.style.display = "none"
+  }
+}
+
+function toggleControls()
+{
+  let songlist = document.getElementById("songlist")
+  let controls = document.getElementById("controls")
+  if (window.getComputedStyle(controls).display == "none") {
+    songlist.style.width = "calc(100% - 52px)"
+    controls.style.display = "block"
+  } else {
+    songlist.style.width = "100%"
+    controls.style.display = "none"
+  }
+}

@@ -1,7 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron")
 const path = require("path")
 
-
 // Creates a new window
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -26,6 +25,11 @@ const createWindow = () => {
     }).catch(err => {
       console.log(err)
     })
+  })
+
+  // Open a playlist
+  ipcMain.on("openPlaylist", (event, directory) => {
+    event.reply("getPlaylistDirectory", directory)
   })
 
   // Quit event

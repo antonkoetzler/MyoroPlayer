@@ -71,3 +71,30 @@ body > header > spacer {
   position: fixed; bottom: 10px;
   left: 50%; transform: translateX(-50%);
 }
+
+/* <main> holds the song list and music controls */
+#main
+{
+  height: calc(100% - 32px); width: calc(100% - 124px);
+  position: fixed; top: 32px; right: 0;
+  z-index: -9999;
+}
+
+#songlist
+{
+  height: 100%; width: 100%;
+  list-style-type: none;
+  margin: 0; padding: 0;
+  display: flex; flex-flow: column nowrap;
+  overflow-y: auto;
+}
+
+.songButton { text-align: left; }
+
+#controls
+{
+  display: none;
+  height: 50px; width: 100%;
+  border-top: 2px solid #7393B3;
+  position: absolute; bottom: 0; right: 0;
+}
