@@ -1,14 +1,20 @@
 window.addEventListener("keydown", () => {
-  if (event.ctrlKey)
-  {
-    switch (event.keyCode)
-    {
+  document.getElementById("errorMessage").style.display = "none"
+
+  if (event.ctrlKey) {
+    switch (event.keyCode) {
       // Ctrl + Q ~ Quit
       case 81: quit()
       // Ctrl + N ~ Add playlist
       case 78: addPlaylist()
     }
   }
+})
+window.addEventListener("click", () => {
+  document.getElementById("errorMessage").style.display = "none"
+
+  // If a taskbar button (not dropdown button) is not clicked, clean dropdowns
+  if (event.target.className != "taskbarButton") cleanDropdowns()
 })
 
 // Disables every dropdown menu enabled
