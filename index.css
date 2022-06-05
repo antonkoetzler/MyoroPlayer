@@ -18,7 +18,7 @@ body > header
   position: fixed; top: 0; left: 0;
 }
 
-/* Button for the taskbar (and also sidebar button) */
+/* Button for the taskbar (and also dropdown and sidebar buttons) */
 .taskbarButton
 {
   height: 30px;
@@ -42,6 +42,7 @@ body > header
   border-right: 2px solid #7393B3;
 }
 
+/* Taskbar dropdown menu */
 body > header > div > ul
 {
   display: none; flex-flow: column nowrap;
@@ -56,4 +57,18 @@ body > header > spacer
 {
   height: 30px; width: 2px;
   background: #7393B3;
+}
+
+/* Sidebar to view playlists */
+#sidebar
+{
+  height: calc(100% - 32px); width: 122px;
+  border-right: 2px solid #7393B3;
+  position: fixed; top: 32px; left: 0;
+  z-index: -9998;
+}
+.sidebarButton
+{
+  width: 122px;
+  font-size: 18px;
 }

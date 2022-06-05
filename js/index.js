@@ -5,6 +5,8 @@ window.addEventListener("keydown", () => {
     {
       // Ctrl + Q ~ Quit
       case 81: quit()
+      // Ctrl + N ~ Add playlist
+      case 78: addPlaylist()
     }
   }
 })
@@ -25,3 +27,7 @@ function toggleDropdown(id) {
 }
 
 function quit() { ipc.send("quit", "") }
+
+function addPlaylist() { ipc.send("addPlaylist", "") }
+
+function openPlaylist(directory) { alert(directory) }

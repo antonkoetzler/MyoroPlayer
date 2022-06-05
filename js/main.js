@@ -1,8 +1,6 @@
-const { app, BrowserWindow, ipcMain } = require("electron")
+const { app, BrowserWindow, ipcMain, dialog } = require("electron")
 const path = require("path")
 
-// Quit event
-ipcMain.on("quit", (event, data) => { app.exit(0) })
 
 // Creates a new window
 const createWindow = () => {
@@ -18,6 +16,20 @@ const createWindow = () => {
   })
   win.loadFile("index.html")
   win.setMenu(null)
+
+  // Add a playlist
+  ipcMain.on("addPlaylist", (event, data) => {
+    // Opens a native dialog to add a directory
+    dialog.showOpenDialog(win, { properties: ["openDirectory"] }).then(result => {
+      // After the user uses the window, we send the directory to the renderer
+      if (!result.canceled) event.reply("getPlaylist", result.filePaths)
+    }).catch(err => {
+      console.log(err)
+    })
+  })
+
+  // Quit event
+  ipcMain.on("quit", (event, data) => { app.exit(0) })
 }
 
 // Once app fires a ready event, we may load index.html
