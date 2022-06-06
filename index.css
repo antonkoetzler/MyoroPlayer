@@ -89,7 +89,12 @@ body > header > spacer {
   overflow-y: auto;
 }
 
-.songButton { text-align: left; }
+.songButton
+{
+  text-align: left;
+  height: auto;
+  padding: 5px;
+}
 
 #controls
 {

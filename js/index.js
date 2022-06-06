@@ -12,9 +12,13 @@ window.addEventListener("keydown", () => {
   if (event.altKey) {
     switch (event.keyCode) {
       // Alt + S ~ Toggle sidebar
-      case 83: toggleSidebar()
+      case 83:
+        toggleSidebar()
+        break
       // Alt + C ~ Toggle controls
-      case 67: toggleControls()
+      case 67:
+        toggleControls()
+        break
     }
   }
 })
@@ -66,10 +70,10 @@ function toggleControls()
   let songlist = document.getElementById("songlist")
   let controls = document.getElementById("controls")
   if (window.getComputedStyle(controls).display == "none") {
-    songlist.style.width = "calc(100% - 52px)"
+    songlist.style.height = "calc(100% - 52px)"
     controls.style.display = "block"
   } else {
-    songlist.style.width = "100%"
+    songlist.style.height = "100%"
     controls.style.display = "none"
   }
 }
