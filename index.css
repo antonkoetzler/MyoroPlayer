@@ -132,3 +132,13 @@ body > header > spacer {
   cursor: pointer;
 }
 .slider::-webkit-slider-thumb:hover { background: #51677D; }
+#volumeSlider {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+}
+
+/* Box for volume slider to correct position it */
+#volumeControl {
+  width: 150px; height: 100%;
+  position: absolute; right: 5px;
+}
