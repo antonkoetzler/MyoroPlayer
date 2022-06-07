@@ -38,11 +38,18 @@
     <ul id="songlist">
     </ul>
     <div id="controls">
+      <!-- Box for song slider, play, pause, previous, next, and shuffle -->
+      <section id="songControl">
+        <input type="range" min="0" max="100" value="50" class="slider">
+      </section>
     </div>
   </main>
 
   <!-- Error message -->
   <p id="errorMessage">Error</p>
+
+  <!-- Plays music -->
+  <audio id="player" src=""></audio>
 </body>
 
 </html>

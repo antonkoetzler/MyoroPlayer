@@ -70,7 +70,7 @@ function toggleControls()
   let songlist = document.getElementById("songlist")
   let controls = document.getElementById("controls")
   if (window.getComputedStyle(controls).display == "none") {
-    songlist.style.height = "calc(100% - 52px)"
+    songlist.style.height = "calc(100% - 62px)"
     controls.style.display = "block"
   } else {
     songlist.style.height = "100%"
@@ -78,4 +78,13 @@ function toggleControls()
   }
 }
 
-function playSong(directory) { alert(directory) }
+function playSong(directory)
+{
+  let controls = document.getElementById("controls")
+  if (window.getComputedStyle(controls).display == "none") controls.style.display = "block"
+
+  // Loading the song to the music player
+  let player = document.getElementById("player")
+  player.src = directory
+  player.play()
+}

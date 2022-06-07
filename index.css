@@ -73,15 +73,13 @@ body > header > spacer {
 }
 
 /* <main> holds the song list and music controls */
-#main
-{
+#main {
   height: calc(100% - 32px); width: calc(100% - 124px);
   position: fixed; top: 32px; right: 0;
   z-index: -9999;
 }
 
-#songlist
-{
+#songlist {
   height: 100%; width: 100%;
   list-style-type: none;
   margin: 0; padding: 0;
@@ -89,17 +87,48 @@ body > header > spacer {
   overflow-y: auto;
 }
 
-.songButton
-{
+.songButton {
   text-align: left;
   height: auto;
   padding: 5px;
 }
 
-#controls
-{
+#controls {
   display: none;
-  height: 50px; width: 100%;
+  height: 60px; width: 100%;
   border-top: 2px solid #7393B3;
   position: absolute; bottom: 0; right: 0;
 }
+
+/* Box for song slider, play, paurse, previous, next, and shuffle */
+#songControl
+{
+  width: 300px; height: 100%;
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+}
+
+/* Slider class for song and volume sliders */
+.slider {
+  /* Overrides default CSS styling for the slider */
+  -webkit-appearance: none;
+  appearance: none;
+
+  width: 100%; height: 2px;
+
+  background: #7393B3;
+  border: none; outline: none;
+}
+/* Slider thumb (what the user clicks to adjust song or volume) */
+.slider::-webkit-slider-thumb {
+  /* Overrides default CSS styling for the slider */
+  -webkit-appearance: none;
+  appearance: none;
+
+  height: 15px; width: 15px;
+  background: #7393B3;
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+.slider::-webkit-slider-thumb:hover { background: #51677D; }

@@ -128,7 +128,7 @@ ipcRenderer.on("getPlaylistDirectory", (event, dir) => {
           let button = document.createElement("button")
           button.innerHTML = name
           button.className = "taskbarButton songButton"
-          button.setAttribute("onClick", "playSong(" + JSON.stringify(songDirectory) + ")")
+          button.setAttribute("onDblClick", "playSong(" + JSON.stringify(songDirectory) + ")")
           document.getElementById("songlist").appendChild(button)
         }
       })
