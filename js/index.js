@@ -65,12 +65,11 @@ function toggleSidebar()
   }
 }
 
-function toggleControls()
-{
+function toggleControls() {
   let songlist = document.getElementById("songlist")
   let controls = document.getElementById("controls")
   if (window.getComputedStyle(controls).display == "none") {
-    songlist.style.height = "calc(100% - 62px)"
+    songlist.style.height = "calc(100% - 77px)"
     controls.style.display = "block"
   } else {
     songlist.style.height = "100%"
