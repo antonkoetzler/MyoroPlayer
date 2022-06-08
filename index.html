@@ -43,10 +43,10 @@
         <input type="range" min="0" max="100" value="50" class="slider">
         <!-- Box for: play/pause, next, previous, and shuffle buttons -->
         <div>
-          <img src="img/shuffle.png">
-          <img src="img/previous.png">
-          <img src="img/play.png">
-          <img src="img/next.png">
+          <img src="img/shuffle.png" id="shuffle" onmouseover="songControlButtonHover('shuffle')" onmouseout="songControlButtonNotHovered('shuffle')">
+          <img src="img/previous.png" id="previous" onmouseover="songControlButtonHover('previous')" onmouseout="songControlButtonNotHovered('previous')">
+          <img src="img/play.png" id="play" onmouseover="songControlButtonHover('play')" onmouseout="songControlButtonNotHovered('play')" onclick="togglePlay()">
+          <img src="img/next.png" id="next" onmouseover="songControlButtonHover('next')" onmouseout="songControlButtonNotHovered('next')">
         </div>
       </section>
 

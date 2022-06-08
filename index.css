@@ -126,7 +126,6 @@ body > header > spacer {
   padding: 4px; border-radius: 10px;
   cursor: pointer;
 }
-#songControl > div > img:hover { background: coral; }
 
 /* Slider class for song and volume sliders */
 .slider {

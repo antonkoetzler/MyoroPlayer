@@ -1,3 +1,6 @@
+var songCache = [] // Saves previously played songs
+
+// Key combination control
 window.addEventListener("keydown", () => {
   document.getElementById("errorMessage").style.display = "none"
 
@@ -22,11 +25,18 @@ window.addEventListener("keydown", () => {
     }
   }
 })
+// Click control
 window.addEventListener("click", () => {
   document.getElementById("errorMessage").style.display = "none"
 
   // If a taskbar button (not dropdown button) is not clicked, clean dropdowns
   if (event.target.className != "taskbarButton") cleanDropdowns()
+})
+// Context menu (right click menu)
+window.addEventListener("contextmenu", () => {
+  if (event.target.className == "taskbarButton songButton") {
+    alert("activate context menu")
+  }
 })
 
 // Disables every dropdown menu enabled
@@ -86,4 +96,56 @@ function playSong(directory)
   let player = document.getElementById("player")
   player.src = directory
   player.play()
+
+  // Adding the directory of the song to songCache (global array)
+  songCache.push(directory)
+}
+
+// Changes the src and background of a song control button (play, prev, etc)
+function songControlButtonHover(id) {
+  let button = document.getElementById(id)
+  switch (id)
+  {
+    case "shuffle":
+      button.src = "img/shuffleHover.png"
+      break
+    case "previous":
+      button.src = "img/previousHover.png"
+      break
+    case "play":
+      button.src = "img/playHover.png"
+      break
+    case "next":
+      button.src = "img/nextHover.png"
+      break
+  }
+  button.style.background = "#7393B3"
+}
+
+// Resets changes made by songControlButtonHover(id)
+function songControlButtonNotHovered(id) {
+ let button = document.getElementById(id)
+ switch (id)
+ {
+   case "shuffle":
+     button.src = "img/shuffle.png"
+     break
+   case "previous":
+     button.src = "img/previous.png"
+     break
+   case "play":
+     button.src = "img/play.png"
+     break
+   case "next":
+     button.src = "img/next.png"
+     break
+  }
+  button.style.background = "none"
+}
+
+// Function for the play button
+function togglePlay() {
+  let player = document.getElementById("player")
+  if (player.paused) player.play()
+  else               player.pause()
 }
