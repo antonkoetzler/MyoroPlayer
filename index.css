@@ -161,3 +161,10 @@ body > header > spacer {
   width: 150px; height: 100%;
   position: absolute; right: 5px;
 }
+
+#contextMenu {
+  background: #FFFFFF; border: 2px solid #7393B3;
+  display: none; flex-flow: column nowrap;
+  position: absolute;
+}
+.contextMenuButton { background: rgba(0, 0, 0, 0.1); }

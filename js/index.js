@@ -28,14 +28,30 @@ window.addEventListener("keydown", () => {
 // Click control
 window.addEventListener("click", () => {
   document.getElementById("errorMessage").style.display = "none"
+  document.getElementById("contextMenu").style.display = "none"
 
   // If a taskbar button (not dropdown button) is not clicked, clean dropdowns
   if (event.target.className != "taskbarButton") cleanDropdowns()
 })
 // Context menu (right click menu)
 window.addEventListener("contextmenu", () => {
-  if (event.target.className == "taskbarButton songButton") {
-    alert("activate context menu")
+  if (event.target.className == "taskbarButton songButton")
+  {
+    let contextMenu = document.getElementById("contextMenu")
+
+    // We normalize the position of the context menu to not be messed up
+    // Positions of where the context menu will be placed
+    let posX = window.innerWidth
+    let posY = window.innerHeight
+    let mousePosX = event.clientX
+    let mousePosY = event.clientY
+
+    if ((posX - mousePosX) < 165) mousePosX = posX - 165
+    if ((posY - mousePosY) < 65)  mousePosY = posY - 65
+
+    contextMenu.style.left = mousePosX + "px"
+    contextMenu.style.top = mousePosY + "px"
+    contextMenu.style.display = "flex"
   }
 })
 
@@ -90,7 +106,11 @@ function toggleControls() {
 function playSong(directory)
 {
   let controls = document.getElementById("controls")
-  if (window.getComputedStyle(controls).display == "none") controls.style.display = "block"
+  if (window.getComputedStyle(controls).display == "none")
+  {
+    document.getElementById("songlist").style.height = "calc(100% - 77px)"
+    controls.style.display = "block"
+  }
 
   // Loading the song to the music player
   let player = document.getElementById("player")
