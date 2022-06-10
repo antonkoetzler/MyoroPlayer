@@ -24,8 +24,10 @@
     <div>
       <button class="taskbarButton" onclick="toggleDropdown('view')">View</button>
       <ul id="view" style="left: 50px;">
-        <button class="taskbarButton dropdownButton" style="border-top: 2px solid #7393B3;" onclick="toggleSidebar()">Show Sidebar&nbsp;&nbsp;~ Alt + S</button>
+        <button class="taskbarButton dropdownButton" style="border-top: 2px solid #7393B3;">Refresh Playlist ~ F5</button>
+        <button class="taskbarButton dropdownButton" onclick="toggleSidebar()">Show Sidebar&nbsp;&nbsp;~ Alt + S</button>
         <button class="taskbarButton dropdownButton" style="border-bottom: 2px solid #7393B3;" onclick="toggleControls()">Show Controls ~ Alt + C</button>
+      </ul>
     </div>
   </header>
 
@@ -43,10 +45,10 @@
         <input type="range" min="0" max="100" value="50" class="slider">
         <!-- Box for: play/pause, next, previous, and shuffle buttons -->
         <div>
-          <img src="img/shuffle.png" id="shuffle" onmouseover="songControlButtonHover('shuffle')" onmouseout="songControlButtonNotHovered('shuffle')">
-          <img src="img/previous.png" id="previous" onmouseover="songControlButtonHover('previous')" onmouseout="songControlButtonNotHovered('previous')">
+          <img src="img/shuffle.png" id="shuffle" onmouseover="songControlButtonHover('shuffle')" onmouseout="songControlButtonNotHovered('shuffle')" onclick="toggleShuffle()">
+          <img src="img/previous.png" id="previous" onmouseover="songControlButtonHover('previous')" onmouseout="songControlButtonNotHovered('previous')" onclick="previousSong()">
           <img src="img/play.png" id="play" onmouseover="songControlButtonHover('play')" onmouseout="songControlButtonNotHovered('play')" onclick="togglePlay()">
-          <img src="img/next.png" id="next" onmouseover="songControlButtonHover('next')" onmouseout="songControlButtonNotHovered('next')">
+          <img src="img/next.png" id="next" onmouseover="songControlButtonHover('next')" onmouseout="songControlButtonNotHovered('next')" onclick="nextSong()">
         </div>
       </section>
 
@@ -59,15 +61,12 @@
 
   <!-- Context menu (right click menu) -->
   <div id="contextMenu">
-    <button class="taskbarButton contextMenuButton">Add to Queue</button>
+    <button class="taskbarButton contextMenuButton" onclick="queueSong()">Add to Queue</button>
     <button class="taskbarButton contextMenuButton">Add to Playlist</button>
   </div>
 
   <!-- Error message -->
   <p id="errorMessage">Error</p>
-
-  <!-- Plays music -->
-  <audio id="player" src=""></audio>
 </body>
 
 </html>

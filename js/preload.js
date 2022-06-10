@@ -7,6 +7,11 @@ const path = require("path")
 contextBridge.exposeInMainWorld("ipc", {
   send: (evt, message) => { ipcRenderer.send(evt, message) }
 })
+// Create an fs API, can use readdir in index.js
+contextBridge.exposeInMainWorld("fs", {
+  // Returns a directory's files
+  readDirectory: (directory) => { return fs.readdirSync(directory, { encoding: "utf-8" }) }
+})
 
 // Where previously added playlists are added on program start
 window.onload = () => {
@@ -128,6 +133,7 @@ ipcRenderer.on("getPlaylistDirectory", (event, dir) => {
           let button = document.createElement("button")
           button.innerHTML = name
           button.className = "taskbarButton songButton"
+          button.name = songDirectory
           button.setAttribute("onDblClick", "playSong(" + JSON.stringify(songDirectory) + ")")
           document.getElementById("songlist").appendChild(button)
         }
