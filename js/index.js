@@ -277,6 +277,7 @@ function youtubeToMP3() {
   if (window.getComputedStyle(youtubeToMP3).display == "none") {
     youtubeToMP3.style.display = "block"
     document.getElementById("youtubeToMP3Input").focus()
+    document.getElementById("controls").style.display = "none"
   } else youtubeToMP3.style.display = "none"
 }
 
