@@ -14,7 +14,12 @@ window.addEventListener("keydown", () => {
       // Ctrl + Q ~ Quit
       case 81: quit()
       // Ctrl + N ~ Add playlist
-      case 78: addPlaylist()
+      case 78:
+        addPlaylist()
+        break
+      case 89:
+        youtubeToMP3()
+        break
     }
   }
   if (event.altKey) {
@@ -29,6 +34,8 @@ window.addEventListener("keydown", () => {
         break
     }
   }
+
+  if (event.key == "Escape") document.getElementById("youtubeToMP3").style.display = "none"
 })
 // Click control
 window.addEventListener("click", () => {
@@ -37,6 +44,9 @@ window.addEventListener("click", () => {
 
   // If a taskbar button (not dropdown button) is not clicked, clean dropdowns
   if (event.target.className != "taskbarButton") cleanDropdowns()
+ 
+  if (event.target.id != "youtubeToMP3Input" && event.target.id != "youtubeToMP3Button")
+    document.getElementById("youtubeToMP3").style.display = "none"
 })
 // Context menu (right click menu)
 window.addEventListener("contextmenu", () => {
@@ -260,3 +270,21 @@ function nextSong() {
     audio.play()
   }
 }
+
+function youtubeToMP3() {
+  // Div box with input
+  let youtubeToMP3 = document.getElementById("youtubeToMP3")
+  if (window.getComputedStyle(youtubeToMP3).display == "none") {
+    youtubeToMP3.style.display = "block"
+    document.getElementById("youtubeToMP3Input").focus()
+  } else youtubeToMP3.style.display = "none"
+}
+
+// Sends an IPC request to convert the link in #youtubeToMP3Input
+function convertYoutubeLink() {
+  alert("Convert link")
+}
+// Fires convertYoutubeLink() on enter press
+document.addEventListener("keydown", () => {
+  if (event.key == "Enter") convertYoutubeLink()
+})

@@ -3,6 +3,8 @@
   src: url("fonts/iosevka-regular.ttf");
 }
 
+::placeholder { color: #7393B3; }
+
 body {
   margin: 0; padding: 0;
   background: #FFFFFF;
@@ -168,3 +170,39 @@ body > header > spacer {
   position: absolute;
 }
 .contextMenuButton { background: rgba(0, 0, 0, 0.1); }
+
+/* Div box to put youtube link to convert */
+#youtubeToMP3 {
+  display: none;
+  position: absolute; bottom: 10px;
+  left: 50%; transform: translateX(-50%);
+}
+
+#youtubeToMP3Input {
+  outline: none;
+  background: #FFFFFF;
+  border: 2px solid #7393B3;
+
+  padding: 2px 5px;
+
+  font-family: "Iosevka Regular";
+  font-size: 20px; color: #7393B3;
+
+  text-align: center;
+}
+
+#youtubeToMP3Button {
+  outline: none;
+  background: #FFFFFF;
+  border: 2px solid #7393B3;
+
+  font-family: "Iosevka Regular";
+  font-size: 20px; color: #7393B3;
+
+  padding: 2px 5px;
+  cursor: pointer;
+}
+#youtubeToMP3Button:hover {
+  background: #7393B3;
+  color: #FFFFFF;
+}
