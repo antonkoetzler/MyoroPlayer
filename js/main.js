@@ -43,6 +43,9 @@ const createWindow = () => {
     }).catch(err => { console.log(err) })
   })
 
+  // Sending ipcRenderer directory to run script getAlbumCover
+  ipcMain.on("getAlbumCover", (event, directory) => { event.reply("runAlbumCoverScript", directory) })
+
   // Quit event
   ipcMain.on("quit", (event, data) => { app.exit(0) })
 }

@@ -207,3 +207,36 @@ body > header > spacer {
   background: #7393B3;
   color: #FFFFFF;
 }
+
+#songInformation {
+  width: 180px; height: 70px;
+  position: absolute; left: 5px;
+  top: 50%; transform: translateY(-50%);
+}
+#albumCover {
+  width: 70px; height: 70px;
+}
+
+/* Wrapper to slide text in */
+#songNameWrapper {
+  width: 105px;
+  overflow: hidden;
+  position: absolute; left: 75px; top: 25px;
+}
+/* Text that will be sliding */
+#songName {
+  width: 100%;
+  font-family: "Iosevka Regular";
+  font-size: 16px; color: #7393B3;
+}
+#animationWrapper {
+  height: 20px;
+  transform: translateX(100%);
+  animation: slidingAnimation 5s linear infinite;
+  white-space: nowrap;
+}
+  
+@keyframes slidingAnimation {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}

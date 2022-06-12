@@ -40,9 +40,15 @@
     <ul id="songlist">
     </ul>
     <div id="controls">
+      <!-- Box for song information (song name & album cover) -->
+      <section id="songInformation">
+        <img src="https://i.pinimg.com/originals/10/91/94/1091948c6b80b65b9eef8c163f0ae42a.jpg" id="albumCover">
+        <div id="songNameWrapper"><div id="animationWrapper"><span id="songName">bruh sound effect</span></div></div>
+      </section>
+
       <!-- Box for song slider, play, pause, previous, next, and shuffle -->
       <section id="songControl">
-        <input type="range" min="0" max="100" value="50" class="slider">
+        <input type="range" min="0" max="100" value="50" class="slider" id="songSlider" onchange="changeSongPosition(this.value)">
         <!-- Box for: play/pause, next, previous, and shuffle buttons -->
         <div>
           <img src="img/shuffle.png" id="shuffle" onmouseover="songControlButtonHover('shuffle')" onmouseout="songControlButtonNotHovered('shuffle')" onclick="toggleShuffle()">
@@ -54,7 +60,7 @@
 
       <!-- Volume slider -->
       <section id="volumeControl">
-        <input type="range" min="0" max="100" value="50" class="slider" id="volumeSlider">
+        <input type="range" min="0" max="100" value="50" class="slider" id="volumeSlider" oninput="changeVolume(this.value)">
       </section>
     </div>
   </main>

@@ -3,7 +3,13 @@ var queue = []                              // Saves queued songs
 var contextMenuSong = null                  // Song that is right clicked to activate the context menu
 var shuffle = 0                             // Global variable to control shuffling songs
 var audio = document.createElement("audio") // Our audio player
+audio.volume = 0.5
 audio.onended = () => { nextSong() }
+audio.ontimeupdate = () => {
+  let songSlider = document.getElementById("songSlider")
+  songSlider.setAttribute("max", audio.duration)
+  songSlider.value = audio.currentTime
+}
 
 // Key combination control
 window.addEventListener("keydown", () => {
@@ -12,7 +18,9 @@ window.addEventListener("keydown", () => {
   if (event.ctrlKey) {
     switch (event.keyCode) {
       // Ctrl + Q ~ Quit
-      case 81: quit()
+      case 81:
+        quit()
+        break
       // Ctrl + N ~ Add playlist
       case 78:
         addPlaylist()
@@ -141,8 +149,29 @@ function highlightCurrentSong(directory) {
   }
 }
 
+// Sets #songName when playing a new song
+function setSongName(directory) {
+  // Grabbing the name of the song to display
+  let songName = null
+  for (var i = (directory.length - 1); i >= 0; i--) {
+    if (directory[i] == '/' || directory[i] == '\\') {
+      songName = directory.substr(i + 1)
+      break
+    }
+  }
+  for (var i = (songName.length - 1); i >= 0; i--) {
+    if (songName[i] == '.') {
+      songName = songName.substr(0, i)
+      break
+    }
+  }
+  document.getElementById("songName").innerHTML = songName
+}
+
 function playSong(directory)
 {
+  ipc.send("getAlbumCover", directory)
+  setSongName(directory)
   highlightCurrentSong(directory)
   directory = fixCharacters(directory)
 
@@ -230,6 +259,7 @@ function previousSong() {
     highlightCurrentSong(songCache[songCache.length - 1])
     audio.src = songCache[songCache.length - 1]
     audio.play()
+    setSongName(decodeURIComponent(songCache[songCache.length - 1]))
   }
 }
 
@@ -287,6 +317,7 @@ function nextSong() {
     highlightCurrentSong(nextSongDirectory)
     audio.src = nextSongDirectory
     audio.play()
+    setSongName(decodeURIComponent(nextSongDirectory))
   }
 }
 
@@ -313,3 +344,9 @@ function convertYoutubeLink() {
 document.addEventListener("keydown", () => {
   if (event.key == "Enter") convertYoutubeLink()
 })
+
+// Change position of song through #songSlider
+function changeSongPosition(newPosition) { audio.currentTime = newPosition }
+
+// Change volume through #volumeSlider
+function changeVolume(newVolume) { audio.volume = newVolume / 100 }

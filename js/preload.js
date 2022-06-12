@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer } = require("electron")
 const os = require("os")              // For getting OS
 const fs = require("fs")              // For reading files (.savedPlaylists)
 const path = require("path")
-const { exec } = require("child_process") // For executing yt2mp3 script
+const { exec, execFile, execFileSync } = require("child_process") // For executing yt2mp3 script
 
 // Creating an ipc API, can use ipc.send(_, _) in index.js now
 contextBridge.exposeInMainWorld("ipc", {
@@ -176,4 +176,23 @@ ipcRenderer.on("convertLink", (event, array) => {
     else if (stderr) alert(stderr)
     else             alert("Conversion complete... Please reload your desired playlist")
   })
+})
+
+// Grabs album cover of directory and replaces of #albumCover
+ipcRenderer.on("runAlbumCoverScript", (event, directory) => {
+  let command = null
+  if (os.platform() == "win32") command = "..\\scripts\\getAlbumCover.exe"
+  else                          command = "../scripts/getAlbumCover"
+  command = path.join(__dirname, command)
+
+  execFileSync(command, [directory])
+
+  // Getting if FromId3.jpg was produced
+  let albumCover = false
+  fs.readdirSync(path.join(__dirname, ".."), { withFileTypes: true, encoding: "utf-8" }).forEach((file) => {
+    if (file.name == "FromId3.jpg") albumCover = true
+  })
+  let img = document.getElementById("albumCover")
+  if (albumCover) img.src = path.join(__dirname, "../FromId3.jpg")
+  else            img.src = "https://i.pinimg.com/originals/10/91/94/1091948c6b80b65b9eef8c163f0ae42a.jpg"
 })
