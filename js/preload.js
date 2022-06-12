@@ -194,5 +194,5 @@ ipcRenderer.on("runAlbumCoverScript", (event, directory) => {
   })
   let img = document.getElementById("albumCover")
   if (albumCover) img.src = path.join(__dirname, "../FromId3.jpg")
-  else            img.src = "https://i.pinimg.com/originals/10/91/94/1091948c6b80b65b9eef8c163f0ae42a.jpg"
+  else            img.src = path.join(__dirname, "../img/defaultAlbumCover.png")
 })
