@@ -126,8 +126,24 @@ function fixCharacters(string) {
       return string.substr(0, i + 1) + encodeURIComponent(string.substr(i + 1))
 }
 
+// Changes background and font color of currently playing song
+function highlightCurrentSong(directory) {
+  directory = decodeURIComponent(directory)
+  let songs = document.getElementsByClassName("taskbarButton songButton")
+  for (var i = 0; i < songs.length; i++) {
+    if (songs[i].name == directory) {
+      songs[i].style.background = "#7393B3"
+      songs[i].style.color = "#FFFFFF"
+    } else {
+      songs[i].style.background = "none"
+      songs[i].style.color = "#7393B3"
+    }
+  }
+}
+
 function playSong(directory)
 {
+  highlightCurrentSong(directory)
   directory = fixCharacters(directory)
 
   let controls = document.getElementById("controls")
@@ -204,12 +220,14 @@ function queueSong() { queue.push(fixCharacters(contextMenuSong)) }
 function previousSong() {
   // If the length of songCache is 1, we reload the current song
   if (songCache.length == 1) {
+    highlightCurrentSong(songCache[songCache.length - 1])
     audio.src = songCache[songCache.length - 1]
     audio.play()
   }
   // If the length of songCache is greater than 1, there are previously played songs
   else if (songCache.length > 1) {
     songCache.pop() // Removing currently playing song
+    highlightCurrentSong(songCache[songCache.length - 1])
     audio.src = songCache[songCache.length - 1]
     audio.play()
   }
@@ -266,6 +284,7 @@ function nextSong() {
       songCache.push(nextSongDirectory)
     }
 
+    highlightCurrentSong(nextSongDirectory)
     audio.src = nextSongDirectory
     audio.play()
   }
@@ -283,7 +302,12 @@ function youtubeToMP3() {
 
 // Sends an IPC request to convert the link in #youtubeToMP3Input
 function convertYoutubeLink() {
-  alert("Convert link")
+  let youtubeLink = document.getElementById("youtubeToMP3Input").value
+  if (youtubeLink.length != 0) {
+    document.getElementById("youtubeToMP3").style.display = "none"
+    // Getting directory to convert the video to
+    ipc.send("getDirectory", youtubeLink)
+  }
 }
 // Fires convertYoutubeLink() on enter press
 document.addEventListener("keydown", () => {

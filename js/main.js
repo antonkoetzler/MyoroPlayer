@@ -32,6 +32,17 @@ const createWindow = () => {
     event.reply("getPlaylistDirectory", directory)
   })
 
+  // Get directory to add converted youtube video
+  ipcMain.on("getDirectory", (event, link) => {
+    dialog.showOpenDialog(win, { properties: ["openDirectory"] }).then(result => {
+      if (!result.canceled) {
+        let returnArray = [link, result.filePaths[0]] // Returning array of the link and directory
+        // Sending to preload.js to run yt2mp3
+        event.reply("convertLink", returnArray)
+      }
+    }).catch(err => { console.log(err) })
+  })
+
   // Quit event
   ipcMain.on("quit", (event, data) => { app.exit(0) })
 }

@@ -29,8 +29,8 @@ body > header {
   cursor: pointer;
 }
 .taskbarButton:hover {
-  background: #7393B3;
-  color: #FFFFFF;
+  background: #7393B3!important;
+  color: #FFFFFF!important;
 }
 .dropdownButton {
   text-align: left;
@@ -92,9 +92,10 @@ body > header > spacer {
 }
 
 .songButton {
-  text-align: left;
   height: auto;
   padding: 5px;
+  cursor: pointer;
+  text-align: left;
 }
 
 /* Holds: song slider, volume slider, play/previous/next/shuffle buttons, and song info */

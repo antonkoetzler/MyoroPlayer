@@ -1,7 +1,8 @@
 const { contextBridge, ipcRenderer } = require("electron")
-const os = require("os") // For getting OS
-const fs = require("fs") // For reading files (.savedPlaylists)
+const os = require("os")              // For getting OS
+const fs = require("fs")              // For reading files (.savedPlaylists)
 const path = require("path")
+const { exec } = require("child_process") // For executing yt2mp3 script
 
 // Creating an ipc API, can use ipc.send(_, _) in index.js now
 contextBridge.exposeInMainWorld("ipc", {
@@ -110,6 +111,31 @@ ipcRenderer.on("getPlaylist", (event, dir) => {
 // Opens a playlist
 ipcRenderer.on("getPlaylistDirectory", (event, dir) => {
   document.getElementById("songlist").innerHTML = ""
+
+  // Highlighting the selected playlist
+  // Getting the name of the playlist
+  let playlistName = null
+  if (dir == 'C:\\' || dir == '/') playlistName = dir
+  else {
+    for (var i = (dir.length - 2); i >= 0; i--) {
+      if (dir[i] == '/' || dir[i] == '\\') {
+        playlistName = dir.substr(i + 1)
+        playlistName = playlistName.substr(0, playlistName.length - 1)
+        break
+      }
+    }
+  }
+  let playlists = document.getElementsByClassName("taskbarButton sidebarButton")
+  for (var i = 0; i < playlists.length; i++) {
+    if (playlists[i].innerHTML == playlistName) {
+      playlists[i].style.background = "#7393B3"
+      playlists[i].style.color = "#FFFFFF"
+    } else {
+      playlists[i].style.background = "none"
+      playlists[i].style.color = "#7393B3"
+    }
+  }
+
   fs.readdir(dir, { encoding: "utf-8" }, (error, files) => {
     if (!error)
     {
@@ -139,5 +165,15 @@ ipcRenderer.on("getPlaylistDirectory", (event, dir) => {
         }
       })
     } else console.log(error)
+  })
+})
+
+// Converts a youtube link to the desired directory
+ipcRenderer.on("convertLink", (event, array) => {
+  let command = "yt2mp3 " + array[0] + " " + array[1]
+  exec(command, (error, stdout, stderr) => {
+    if (error)       alert(error)
+    else if (stderr) alert(stderr)
+    else             alert("Conversion complete... Please reload your desired playlist")
   })
 })
