@@ -28,6 +28,18 @@ window.addEventListener("keydown", () => {
       case 89:
         youtubeToMP3()
         break
+      // Ctrl + Right Arrow Key ~ Next Song
+      case 190:
+        nextSong()
+        break
+      // Ctrl + Left Array Key ~ Previous Song
+      case 188:
+        previousSong()
+        break
+      // Ctrl + % ~ Shuffle
+      case 53:
+        toggleShuffle()
+        break
     }
   }
   if (event.altKey) {
@@ -44,6 +56,7 @@ window.addEventListener("keydown", () => {
   }
 
   if (event.key == "Escape") document.getElementById("youtubeToMP3").style.display = "none"
+  if (event.keyCode == 32) togglePlay() // Spacebar to pause/play
 })
 // Click control
 window.addEventListener("click", () => {
@@ -83,6 +96,7 @@ window.addEventListener("contextmenu", () => {
 function cleanDropdowns() {
   document.getElementById("file").style.display = "none"
   document.getElementById("view").style.display = "none"
+  document.getElementById("songControls").style.display = "none"
 }
 
 // Enables/disables a dropdown menu
@@ -260,6 +274,7 @@ function previousSong() {
     audio.src = songCache[songCache.length - 1]
     audio.play()
     setSongName(decodeURIComponent(songCache[songCache.length - 1]))
+    ipc.send("getAlbumCover", decodeURIComponent(songCache[songCache.length - 1]))
   }
 }
 
@@ -318,6 +333,7 @@ function nextSong() {
     audio.src = nextSongDirectory
     audio.play()
     setSongName(decodeURIComponent(nextSongDirectory))
+    ipc.send("getAlbumCover", decodeURIComponent(nextSongDirectory))
   }
 }
 

@@ -29,6 +29,18 @@
         <button class="taskbarButton dropdownButton" style="border-bottom: 2px solid #7393B3;" onclick="toggleControls()">Show Controls ~ Alt + C</button>
       </ul>
     </div>
+
+    <spacer type="vertical"></spacer>
+
+    <div>
+      <button class="taskbarButton" onclick="toggleDropdown('songControls')">Song Control</button>
+      <ul id="songControls" style="left: 102px;">
+        <button class="taskbarButton dropdownButton" onclick="toggleShuffle()" style="border-top: 2px solid #7393B3;">Toggle Shuffle ~ Ctrl + %</button>
+        <button class="taskbarButton dropdownButton" onclick="previousSong()">Previous Song&nbsp;&nbsp;~ Ctrl + &lt;</button>
+        <button class="taskbarButton dropdownButton" onclick="togglePlay()">Play/Pause&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~ Space</button>
+        <button class="taskbarButton dropdownButton" onclick="nextSong()" style="border-bottom: 2px solid #7393B3;">Next Song&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~ Ctrl + &gt;</button>
+      </ul>
+    </div>
   </header>
 
   <!-- Sidebar to hold playlists -->
@@ -42,8 +54,8 @@
     <div id="controls">
       <!-- Box for song information (song name & album cover) -->
       <section id="songInformation">
-        <img src="https://i.pinimg.com/originals/10/91/94/1091948c6b80b65b9eef8c163f0ae42a.jpg" id="albumCover">
-        <div id="songNameWrapper"><div id="animationWrapper"><span id="songName">bruh sound effect</span></div></div>
+        <img src="img/defaultAlbumCover.png" id="albumCover">
+        <div id="songNameWrapper"><div id="animationWrapper"><span id="songName"></span></div></div>
       </section>
 
       <!-- Box for song slider, play, pause, previous, next, and shuffle -->

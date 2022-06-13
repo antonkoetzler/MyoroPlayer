@@ -9,6 +9,7 @@ const createWindow = () => {
     minWidth: 800,
     minHeight: 600,
     title: "MyoroPlayer",
+    icon: path.join(__dirname, "../img/icon.png"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js")
     }

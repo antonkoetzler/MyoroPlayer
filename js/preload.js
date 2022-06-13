@@ -178,21 +178,23 @@ ipcRenderer.on("convertLink", (event, array) => {
   })
 })
 
+const jsmediatags = require("jsmediatags")
 // Grabs album cover of directory and replaces of #albumCover
 ipcRenderer.on("runAlbumCoverScript", (event, directory) => {
-  let command = null
-  if (os.platform() == "win32") command = "..\\scripts\\getAlbumCover.exe"
-  else                          command = "../scripts/getAlbumCover"
-  command = path.join(__dirname, command)
-
-  execFileSync(command, [directory])
-
-  // Getting if FromId3.jpg was produced
-  let albumCover = false
-  fs.readdirSync(path.join(__dirname, ".."), { withFileTypes: true, encoding: "utf-8" }).forEach((file) => {
-    if (file.name == "FromId3.jpg") albumCover = true
-  })
-  let img = document.getElementById("albumCover")
-  if (albumCover) img.src = path.join(__dirname, "../FromId3.jpg")
-  else            img.src = path.join(__dirname, "../img/defaultAlbumCover.png")
+  // Grabbing the album cover (if there is one)
+  jsmediatags.read(directory, {
+    onSuccess: function(tag) {
+      let albumCover = tag.tags.picture
+      if (albumCover != undefined) {
+        var base64String = ""
+        for (var i = 0; i < albumCover.data.length; i++)
+          base64String += String.fromCharCode(albumCover.data[i])
+        var imageUri = "data: " + albumCover.format + ";base64," + window.btoa(base64String)
+        document.getElementById("albumCover").src = imageUri
+      } else document.getElementById("albumCover").src = path.join(__dirname, "../img/defaultAlbumCover.png")
+    }, 
+    onError: function(error) {
+      alert(error);
+    }
+  });
 })

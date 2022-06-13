@@ -20,6 +20,7 @@
   "homepage": "https://github.com/antonkoetzler/MyoroPlayer#readme",
   "devDependencies": {
     "electron": "^19.0.4",
-    "electron-builder": "^23.0.3"
+    "electron-builder": "^23.0.3",
+    "jsmediatags": "^3.9.7"
   }
 }
