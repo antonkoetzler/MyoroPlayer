@@ -1,12 +1,19 @@
 {
   "name": "myoroplayer",
+  "productName": "MyoroPlayer",
   "version": "1.0.0",
   "description": "A libre music player with Youtube to MP3 functionality",
   "main": "js/main.js",
   "scripts": {
     "start": "electron .",
-    "build-linux": "electron-builder --linux",
-    "build-windows": "electron-builder --win32"
+    "build-linux": "electron-builder build --linux",
+    "build-windows": "electron-builder build --windows --x64 --arm64"
+  },
+  "build": {
+    "extraFiles": [
+      "scripts",
+      ".savedPlaylists"
+    ]
   },
   "repository": {
     "type": "git",
