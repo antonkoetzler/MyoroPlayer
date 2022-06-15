@@ -28,7 +28,7 @@ int main(int argc, char** argv)
   else if (argc == 2)
   {
     std::string link = argv[1]; // Converting to a string
-    std::string command = "scripts\\youtube-dl --extract-audio --audio-format mp3 " + link;
+    std::string command = "youtube-dl --extract-audio --audio-format mp3 " + link;
     system(command.c_str());
   }
   // Convert YouTube link into specific directory
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     std::string link = argv[1];
     std::string directory = argv[2];
     if (directory[directory.length() - 1] != '/') directory += '/';
-    std::string command = "scripts\\youtube-dl --extract-audio --audio-format mp3 -o \"" + directory + "%(title)s.%(ext)s\" " + link;
+    std::string command = "youtube-dl --extract-audio --audio-format mp3 -o \"" + directory + "%(title)s.%(ext)s\" " + link;
     system(command.c_str());
   }
 
