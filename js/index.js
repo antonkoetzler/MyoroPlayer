@@ -295,10 +295,10 @@ function toggleShuffle() {
 // Function for the next song button
 function nextSong() {
   if (songCache.length > 0) {
-    // Grabbing the directory of the last non-queued song
     let currentSongDirectory = songCache[songCache.length - 1]
     let name = null
     let directory = null
+
     for (var i = (currentSongDirectory.length - 1); i >= 0; i--) {
       if (currentSongDirectory[i] == '/' || currentSongDirectory[i] == '\\') {
         name = currentSongDirectory.substr(i + 1)
@@ -309,15 +309,17 @@ function nextSong() {
     }
 
     let files = fs.readDirectory(directory)
-    // Grabbing only the mp3 files
+    // Grabbing mp3 files
     let songs = []
     while (true) {
-      if (files.length == 0) break
+      if (files.length == 0)
+        break
       let file = files[0]
       for (var i = (file.length - 1); i >= 0; i--) {
         if (file[i] == '.') {
           let extension = file.substr(i + 1)
-          if (extension.toUpperCase() == "MP3") songs.push(file)
+          if (extension.toUpperCase() == "MP3")
+            songs.push(file)
           files.shift()
           break
         }
