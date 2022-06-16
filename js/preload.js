@@ -170,11 +170,13 @@ ipcRenderer.on("getPlaylistDirectory", (event, dir) => {
 
 // Converts a youtube link to the desired directory
 ipcRenderer.on("convertLink", (event, array) => {
-  let command = "yt2mp3 " + array[0] + " " + array[1]
-  exec(command, (error, stdout, stderr) => {
+  let executable = null
+  if (os.platform() == "win32") executable = path.join(__dirname, "../scripts/yt2mp3windows")
+  else                          executable = path.join(__dirname, "../scripts/yt2mp3linux")
+  execFile(executable, [array[0], array[1]], (error, stdout, stderr) => {
     if (error)       alert(error)
     else if (stderr) alert(stderr)
-    else             alert("Conversion complete... Please reload your desired playlist")
+    else             alert("Conversion complete! Please reload " + array[1] + " to see new song")
   })
 })
 

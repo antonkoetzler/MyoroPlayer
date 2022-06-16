@@ -1,6 +1,7 @@
 {
   "name": "myoroplayer",
   "productName": "MyoroPlayer",
+  "publisherName": "Myoro",
   "version": "1.0.0",
   "description": "A libre music player with Youtube to MP3 functionality",
   "main": "js/main.js",
@@ -13,7 +14,10 @@
     "extraFiles": [
       "scripts",
       ".savedPlaylists"
-    ]
+    ],
+    "nsis": {
+      "runAfterFinish": false
+    }
   },
   "repository": {
     "type": "git",
