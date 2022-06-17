@@ -240,3 +240,33 @@ body > header > spacer {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
 }
+
+#progressMenu {
+  display: none; flex-flow: row nowrap;
+  height: 30px;
+  position: absolute; right: 0;
+  padding-right: 5px;
+}
+#progressSong {
+  height: 30px;
+  background: none; outline: none; border: none;
+  font-family: "Iosevka Regular";
+  font-size: 20px; color: #7393B3;
+  cursor: pointer;
+  margin-right: 5px;
+}
+#progressSong:hover {
+  background: #7393B3;
+  color: #FFFFFF;
+}
+#progressBarOutline {
+  height: 20px; width: 200px;
+  border: 2px solid #7393B3;
+  position: relative;
+  top: 50%; transform: translateY(-50%);
+}
+#progressBar {
+  background: #7393B3;
+  height: 21px; width: 0;
+  position: relative; left: 0; top: 0;
+}

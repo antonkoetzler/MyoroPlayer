@@ -197,11 +197,17 @@ ipcRenderer.on("convertLink", (event, array) => {
     })
   song.download(url)
   song.on("progress", (progress) => {
-    alert(JSON.stringify(progress))
+    let progressMenu = document.getElementById("progressMenu")
+    if (window.getComputedStyle(progressMenu).display == "none") {
+      progressMenu.style.display = "flex"
+      document.getElementById("progressSong").innerHTML = progress.videoId
+    }
+    let newWidth = progress.progress.percentage + "%"
+    document.getElementById("progressBar").style.width = newWidth
   })
   song.on("finished", (err, data) => {
     if (err) alert(JSON.stringify(err))
-    else     alert(JSON.stringify(data))
+    else     document.getElementById("progressMenu").style.display = "none"
   })
   song.on("error", (error) => { alert(JSON.stringify(error)) })
 })
