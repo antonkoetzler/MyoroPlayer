@@ -32,6 +32,11 @@
   "devDependencies": {
     "electron": "^19.0.4",
     "electron-builder": "^23.0.3",
-    "jsmediatags": "^3.9.7"
+    "jsmediatags": "^3.9.7",
+    "youtube-mp3-downloader": "^0.7.10"
+  },
+  "dependencies": {
+    "jsmediatags": "^3.9.7",
+    "youtube-mp3-downloader": "^0.7.10"
   }
 }

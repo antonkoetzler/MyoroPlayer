@@ -3,6 +3,8 @@ const os = require("os")              // For getting OS
 const fs = require("fs")              // For reading files (.savedPlaylists)
 const path = require("path")
 const { exec, execFile, execFileSync } = require("child_process") // For executing yt2mp3 script
+const jsmediatags = require("jsmediatags")
+const YoutubeMp3Downloader = require("youtube-mp3-downloader")
 
 // Creating an ipc API, can use ipc.send(_, _) in index.js now
 contextBridge.exposeInMainWorld("ipc", {
@@ -36,6 +38,7 @@ window.onload = () => {
               if (os.platform() == "win32") split = directory.split("\\")
               else                          split = directory.split('/')
               name = split[split.length - 2]
+              if (name.length > 12) name = name.substr(0, 12)
             }
 
             let button = document.createElement("button")
@@ -170,14 +173,39 @@ ipcRenderer.on("getPlaylistDirectory", (event, dir) => {
 
 // Converts a youtube link to the desired directory
 ipcRenderer.on("convertLink", (event, array) => {
-  execFile("yt2mp3", [array[0], array[1]], (error, stdout, stderr) => {
-    if (error)       alert(error)
-    else if (stderr) alert(stderr)
-    else             alert("Conversion complete! Please reload " + array[1] + " to see new song")
+  // Grabbing the unique part of the video url
+  let url = null
+  for (var i = (array[0].length - 1); i >= 0; i--) {
+    if (array[0][i] == '=') {
+      url = array[0].substr(i + 1)
+      break
+    }
+  } if (url == null) url = array[0]
+
+  var song = null
+  if (os.platform() == "win32")
+    song = new YoutubeMp3Downloader({
+      "ffmpegPath": path.join(__dirname, "../../../ffmpeg.exe"),
+      "outputPath": array[1],
+      "youtubeVideoQuality": "highestaudio"
+    })
+  else
+    song = new YoutubeMp3Downloader({
+      "ffmpegPath": "ffmpeg",
+      "outputPath": array[1],
+      "youtubeVideoQuality": "highestaudio"
+    })
+  song.download(url)
+  song.on("progress", (progress) => {
+    alert(JSON.stringify(progress))
   })
+  song.on("finished", (err, data) => {
+    if (err) alert(JSON.stringify(err))
+    else     alert(JSON.stringify(data))
+  })
+  song.on("error", (error) => { alert(JSON.stringify(error)) })
 })
 
-const jsmediatags = require("jsmediatags")
 // Grabs album cover of directory and replaces of #albumCover
 ipcRenderer.on("runAlbumCoverScript", (event, directory) => {
   // Grabbing the album cover (if there is one)

@@ -309,23 +309,37 @@ function nextSong() {
     }
 
     let files = fs.readDirectory(directory)
+    // Grabbing only the mp3 files
+    let songs = []
+    while (true) {
+      if (files.length == 0) break
+      let file = files[0]
+      for (var i = (file.length - 1); i >= 0; i--) {
+        if (file[i] == '.') {
+          let extension = file.substr(i + 1)
+          if (extension.toUpperCase() == "MP3") songs.push(file)
+          files.shift()
+          break
+        }
+      }
+    }
 
     let nextSongDirectory = directory
     if (queue.length > 0) {
       nextSongDirectory = queue[queue.length - 1]
       queue.pop()
     } else if (shuffle == 0) {
-      if (files.indexOf(name) == (files.length - 1))
-        nextSongDirectory += encodeURIComponent(files[0])
+      if (songs.indexOf(name) == (songs.length - 1))
+        nextSongDirectory += encodeURIComponent(songs[0])
       else
-        nextSongDirectory += encodeURIComponent(files[files.indexOf(name) + 1])
+        nextSongDirectory += encodeURIComponent(songs[songs.indexOf(name) + 1])
       songCache.push(nextSongDirectory)
     } else {
       let nextSongIndex = null
       while (true) {
-        nextSongIndex = Math.floor(Math.random() * files.length)
-        if (nextSongIndex != files.indexOf(name)) break
-      } nextSongDirectory += encodeURIComponent(files[nextSongIndex])
+        nextSongIndex = Math.floor(Math.random() * songs.length)
+        if (nextSongIndex != songs.indexOf(name)) break
+      } nextSongDirectory += encodeURIComponent(songs[nextSongIndex])
       songCache.push(nextSongDirectory)
     }
 
