@@ -175,12 +175,21 @@ ipcRenderer.on("getPlaylistDirectory", (event, dir) => {
 ipcRenderer.on("convertLink", (event, array) => {
   // Grabbing the unique part of the video url
   let url = null
-  for (var i = (array[0].length - 1); i >= 0; i--) {
+  for (var i = 0; i < array[0].length; i++) {
     if (array[0][i] == '=') {
       url = array[0].substr(i + 1)
       break
     }
-  } if (url == null) url = array[0]
+  }
+  if (url != null) {
+    for (var i = (url.length - 1); i >= 0; i--) {
+      if (url[i] == '&') {
+        url = url.substr(0, i)
+        break
+      }
+    }
+  }
+  if (url == null) url = array[0]
 
   var song = null
   if (os.platform() == "win32")
